@@ -93,6 +93,7 @@
 		38E91D331880C8E4006CA729 /* map_trees.png in Resources */ = {isa = PBXBuildFile; fileRef = 38E91D311880C8E4006CA729 /* map_trees.png */; };
 		38FCBAA4188223B40017B9D2 /* ParallaxSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FCBAA3188223B40017B9D2 /* ParallaxSprite.swift */; };
 		38FCBAA61882276F0017B9D2 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FCBAA51882276F0017B9D2 /* Character.swift */; };
+		553036AB1CDE266A007FA704 /* lives.png in Resources */ = {isa = PBXBuildFile; fileRef = 38FE6C751884CCF500646ED4 /* lives.png */; };
 		553993161BB9B5C500735879 /* Particles.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5538B49C1BB730F300DB8AC0 /* Particles.xcassets */; };
 		553993171BB9B73100735879 /* Particles.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5538B49C1BB730F300DB8AC0 /* Particles.xcassets */; };
 		5544F7841B3F09940078214A /* Texture Atlases.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5544F7831B3F09940078214A /* Texture Atlases.xcassets */; };
@@ -510,6 +511,7 @@
 				38280E4C1884B3890017B525 /* Death.sks in Resources */,
 				38280E4B1884B3890017B525 /* Damage.sks in Resources */,
 				38E91D321880C8E4006CA729 /* map_level.png in Resources */,
+				553036AB1CDE266A007FA704 /* lives.png in Resources */,
 				38280E501884B3890017B525 /* Leaves_01.sks in Resources */,
 				553993161BB9B5C500735879 /* Particles.xcassets in Resources */,
 				5544F7841B3F09940078214A /* Texture Atlases.xcassets in Resources */,
