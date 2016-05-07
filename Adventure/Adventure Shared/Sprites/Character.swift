@@ -16,24 +16,19 @@ enum MoveDirection {
     case Forward, Left, Right, Back
 }
 
-struct ColliderType : RawOptionSetType {
-	typealias RawValue = UInt32
-	private(set) var value: UInt32 = 0
-	private init(_ value: UInt32) { self.value = value }
-	init(rawValue value: UInt32) { self.value = value }
-	init(nilLiteral: ()) { self.value = 0 }
-	static var allZeros: ColliderType { return self(0) }
-	static func fromMask(raw: UInt32) -> ColliderType { return self(raw) }
-	var rawValue: UInt32 { return self.value }
+struct ColliderType : OptionSetType {
+	let rawValue: UInt32
+	private init(_ value: UInt32) { self.init(rawValue: value) }
+	init(rawValue value: UInt32) { self.rawValue = value }
 	
-	static var Hero: ColliderType { return ColliderType(1 << 0) }
-	static var GoblinOrBoss: ColliderType { return ColliderType(1 << 1) }
-	static var Projectile: ColliderType { return ColliderType(1 << 2) }
-	static var Wall: ColliderType { return ColliderType(1 << 3) }
-	static var Cave: ColliderType { return ColliderType(1 << 4) }
+	static let Hero = ColliderType(1 << 0)
+	static let GoblinOrBoss = ColliderType(1 << 1)
+	static let Projectile = ColliderType(1 << 2)
+	static let Wall = ColliderType(1 << 3)
+	static let Cave = ColliderType(1 << 4)
 	
-	static let all = ColliderType.Hero | ColliderType.GoblinOrBoss | ColliderType.Projectile | ColliderType.Wall | ColliderType.Cave
-	static let allButProjectile = ColliderType.Hero | ColliderType.GoblinOrBoss | ColliderType.Wall | ColliderType.Cave
+	static let all: ColliderType = [ColliderType.Hero, ColliderType.GoblinOrBoss, ColliderType.Projectile, ColliderType.Wall, ColliderType.Cave]
+	static let allButProjectile: ColliderType = [ColliderType.Hero, ColliderType.GoblinOrBoss, ColliderType.Wall, ColliderType.Cave]
 }
 
 class Character: ParallaxSprite {
@@ -189,7 +184,7 @@ class Character: ParallaxSprite {
     func sharedInitAtPosition(position: CGPoint) {
         let atlas = SKTextureAtlas(named: "Environment")
 
-        shadowBlob = SKSpriteNode(texture: atlas.textureNamed("blobShadow.png"))
+        shadowBlob = SKSpriteNode(texture: atlas.textureNamed("blobShadow"))
         shadowBlob.zPosition = -1.0
 
         self.position = position
@@ -200,7 +195,7 @@ class Character: ParallaxSprite {
     // MARK: NSCopying
     
     override func copyWithZone(zone: NSZone) -> AnyObject {
-        var character = super.copyWithZone(zone) as! Character
+        let character = super.copyWithZone(zone) as! Character
         character.isDying = isDying
         character.isAttacking = isAttacking
         character.health = health
@@ -286,7 +281,7 @@ class Character: ParallaxSprite {
     // MARK: Character Animation
     
     func resolveRequestedAnimation() {
-        var (frames, key) = animationFramesAndKeyForState(requestedAnimation)
+        let (frames, key) = animationFramesAndKeyForState(requestedAnimation)
 
         fireAnimationForState(requestedAnimation, usingTextures: frames, withKey: key)
 
@@ -313,7 +308,7 @@ class Character: ParallaxSprite {
     }
 
     func fireAnimationForState(animationState: AnimationState, usingTextures frames: [SKTexture], withKey key: String) {
-        var animAction = actionForKey(key)
+        let animAction = actionForKey(key)
 
         if animAction != nil || frames.count < 1 {
             return
@@ -380,9 +375,9 @@ class Character: ParallaxSprite {
     }
     
     func faceToPosition(position: CGPoint) -> CGFloat {
-        var angle = adjustAssetOrientation(position.radiansToPoint(self.position))
+        let angle = adjustAssetOrientation(position.radiansToPoint(self.position))
         
-        var action = SKAction.rotateToAngle(angle, duration: 0)
+        let action = SKAction.rotateToAngle(angle, duration: 0)
         
         runAction(action)
 
@@ -392,9 +387,9 @@ class Character: ParallaxSprite {
     func moveTowardsPosition(targetPosition: CGPoint, withTimeInterval timeInterval: NSTimeInterval) {
         // Grab an immutable position in case Sprite Kit changes it underneath us.
         let currentPosition = position
-        var deltaX = targetPosition.x - currentPosition.x
-        var deltaY = targetPosition.y - currentPosition.y
-        var maximumDistance = movementSpeed * CGFloat(timeInterval)
+        let deltaX = targetPosition.x - currentPosition.x
+        let deltaY = targetPosition.y - currentPosition.y
+        let maximumDistance = movementSpeed * CGFloat(timeInterval)
         
         moveFromCurrentPosition(currentPosition, byDeltaX: deltaX, deltaY: deltaY, maximumDistance: maximumDistance)
     }
@@ -402,9 +397,9 @@ class Character: ParallaxSprite {
     func moveInDirection(direction: CGVector, withTimeInterval timeInterval: NSTimeInterval, facing: CGPoint? = nil) {
         // Grab an immutable position in case Sprite Kit changes it underneath us.
         let currentPosition = position
-        var deltaX = movementSpeed * direction.dx
-        var deltaY = movementSpeed * direction.dy
-        var maximumDistance = movementSpeed * CGFloat(timeInterval)
+        let deltaX = movementSpeed * direction.dx
+        let deltaY = movementSpeed * direction.dy
+        let maximumDistance = movementSpeed * CGFloat(timeInterval)
         
         moveFromCurrentPosition(currentPosition, byDeltaX: deltaX, deltaY: deltaY, maximumDistance: maximumDistance, facing: facing)
     }
@@ -412,7 +407,7 @@ class Character: ParallaxSprite {
     func moveFromCurrentPosition(currentPosition: CGPoint, byDeltaX dx: CGFloat, deltaY dy: CGFloat, maximumDistance: CGFloat, facing: CGPoint? = nil) {
         let targetPosition = CGPoint(x: currentPosition.x + dx, y: currentPosition.y + dy)
         
-        var angle = adjustAssetOrientation(targetPosition.radiansToPoint(currentPosition))
+        let angle = adjustAssetOrientation(targetPosition.radiansToPoint(currentPosition))
         
         if facing != nil {
             let facePosition = currentPosition + facing!
@@ -422,7 +417,7 @@ class Character: ParallaxSprite {
             faceToPosition(targetPosition)
         }
         
-        var distRemaining = hypot(dx, dy)
+        let distRemaining = hypot(dx, dy)
         if distRemaining < maximumDistance {
             position = targetPosition
         } else {

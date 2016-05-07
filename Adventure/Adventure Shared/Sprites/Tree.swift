@@ -24,7 +24,7 @@ final class Tree: ParallaxSprite, SharedAssetProvider {
     // MARK: NSCopying
     
     override func copyWithZone(zone: NSZone) -> AnyObject {
-        var tree = super.copyWithZone(zone) as! Tree
+        let tree = super.copyWithZone(zone) as! Tree
         tree.fadeAlpha = fadeAlpha
         return tree
     }
@@ -61,7 +61,7 @@ final class Tree: ParallaxSprite, SharedAssetProvider {
         if distance > opaqueDistance {
             return 1.0
         } else {
-            var multiplier = distance / opaqueDistance
+            let multiplier = distance / opaqueDistance
             return 0.1 + multiplier * multiplier * 0.9
         }
     }
@@ -72,17 +72,17 @@ final class Tree: ParallaxSprite, SharedAssetProvider {
         // Load Trees
         let atlas = SKTextureAtlas(named: "Environment")
         var sprites = [
-            SKSpriteNode(texture: atlas.textureNamed("small_tree_base.png")),
-            SKSpriteNode(texture: atlas.textureNamed("small_tree_middle.png")),
-            SKSpriteNode(texture: atlas.textureNamed("small_tree_top.png"))
+            SKSpriteNode(texture: atlas.textureNamed("small_tree_base")),
+            SKSpriteNode(texture: atlas.textureNamed("small_tree_middle")),
+            SKSpriteNode(texture: atlas.textureNamed("small_tree_top"))
         ]
         Shared.smallTemplate = Tree(sprites: sprites, usingOffset: 25.0)
         Shared.smallTemplate.name = "smallTree"
         
         sprites = [
-            SKSpriteNode(texture: atlas.textureNamed("big_tree_base.png")),
-            SKSpriteNode(texture: atlas.textureNamed("big_tree_middle.png")),
-            SKSpriteNode(texture: atlas.textureNamed("big_tree_top.png"))
+            SKSpriteNode(texture: atlas.textureNamed("big_tree_base")),
+            SKSpriteNode(texture: atlas.textureNamed("big_tree_middle")),
+            SKSpriteNode(texture: atlas.textureNamed("big_tree_top"))
         ]
         Shared.largeTemplate = Tree(sprites: sprites, usingOffset: 150.0)
         Shared.largeTemplate.name = "bigTree"

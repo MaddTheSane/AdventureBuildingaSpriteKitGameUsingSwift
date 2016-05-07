@@ -13,7 +13,11 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     // MARK: Types
     
     enum WorldLayer: Int {
-        case Ground = 0, BelowCharacter, Character, AboveCharacter, Top
+        case Ground = 0
+        case BelowCharacter
+        case Character
+        case AboveCharacter
+        case Top
     }
     
     struct Constants {
@@ -24,10 +28,10 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         
         static let minimumUpdateInterval = 1.0 / 60.0
         
-        // The minimum distance between the hero and a currently visible edge before moving camera.
+        /// The minimum distance between the hero and a currently visible edge before moving camera.
         static let minimumDistanceFromHeroToVisibleEdge: CGFloat = 256.0
         
-        // Node names for each of the HUD nodes.
+        /// Node names for each of the HUD nodes.
         static let hudNodeName = "AdventureHUD"
         static let hudAvatarName = "hudAvatar"
         static let hudScoreName = "hudScore"
@@ -40,34 +44,34 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Properties
     
-    /*
+    /**
         Parent node containing the entire scene. This allows the node to be moved relative to the
         viewport, allowing the characters to move about in a scene larger than the viewport.
     */
     var world = SKNode()
     
-    // Properties to track nodes that are updated during each pass of the game loop. Populated during loading.
+    /// Properties to track nodes that are updated during each pass of the game loop. Populated during loading.
     var heroes = [HeroCharacter]()
     var goblinCaves = [Cave]()
     var trees = [Tree]()
     var particleSystems = [SKEmitterNode]()
     var parallaxSprites = [ParallaxSprite]()
-    // The boss will always exist. Its value is deferred until its position is known when the world is loaded.
+    /// The boss will always exist. Its value is deferred until its position is known when the world is loaded.
     var levelBoss: Boss!
     
-    // Static during game processing. Populated during loading.
+    /// Static during game processing. Populated during loading.
     var backgroundTiles = [SKSpriteNode]()
     
-    // Templates populated during initialization and used during environment population.
+    /// Templates populated during initialization and used during environment population.
     var leafEmitterATemplate: SKEmitterNode
     var leafEmitterBTemplate: SKEmitterNode
     var spawnEmitterTemplate: SKEmitterNode
     var projectileSparkEmitterTemplate: SKEmitterNode
     
-    // Property containing references to the 5 different layers in the world.
+    /// Property containing references to the 5 different layers in the world.
     var layers = [SKNode]()
     
-    // Properties for the nodes that make up the HUD.
+    /// Properties for the nodes that make up the HUD.
     var hudAvatar: SKSpriteNode!
     var hudScore: SKLabelNode!
     var hudLifeHearts = [SKSpriteNode]()
@@ -75,30 +79,30 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     var defaultSpawnPoint = CGPointZero
     var defaultPlayer = Player()
     
-    /*
+    /**
         A maximum of 4 players are supported. The array is initialized with `nil` in each position. The default
         player will be populated during initialization at index 0. Subsequent players will be added as needed 
         during game controller connection up to a maximum of 4.
     */
     var players: [Player!] = [nil, nil, nil, nil]
 
-    // Properties to keep track of details important to scene updates.
+    /// Properties to keep track of details important to scene updates.
     var worldMovedForUpdate = false
     var lastUpdateTimeInterval: NSTimeInterval = 0
 
     // Set to `true` to cheat and start the level next to the boss.
-    var shouldCheat = false
+    let shouldCheat = false
     
-    // A closure to be called when `didMoveToView(_:)` completes.
+    /// A closure to be called when `didMoveToView(_:)` completes.
     var finishedMovingToView: Void -> Void = {}
     
     // MARK: Initializers
     
     override init(size: CGSize) {
-        leafEmitterATemplate = SKEmitterNode(fileNamed: "Leaves_01")
-        leafEmitterBTemplate = SKEmitterNode(fileNamed: "Leaves_02")
-        projectileSparkEmitterTemplate = SKEmitterNode(fileNamed: "ProjectileSplat")
-        spawnEmitterTemplate = SKEmitterNode(fileNamed: "Spawn")
+        leafEmitterATemplate = SKEmitterNode(fileNamed: "Leaves_01")!
+        leafEmitterBTemplate = SKEmitterNode(fileNamed: "Leaves_02")!
+        projectileSparkEmitterTemplate = SKEmitterNode(fileNamed: "ProjectileSplat")!
+        spawnEmitterTemplate = SKEmitterNode(fileNamed: "Spawn")!
         
         super.init(size: size)
 
@@ -281,7 +285,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func updateAfterSimulatingPhysics() {
-        var position = defaultPlayer.hero!.position
+        let position = defaultPlayer.hero!.position
 
         for tree in trees {
             if tree.position.distanceToPoint(position) < 1024 {
@@ -294,7 +298,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
 
         for emitter in particleSystems {
-            var emitterIsVisible = (emitter.position.distanceToPoint(position) < 1024)
+            let emitterIsVisible = (emitter.position.distanceToPoint(position) < 1024)
             if !emitterIsVisible && !emitter.paused {
                 emitter.paused = true
             } else if emitterIsVisible && emitter.paused {
@@ -352,7 +356,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
 
         // Setup the HUD for the default player.
-        loadHUDForPlayer(defaultPlayer, atIndex: 0)
+        loadHUDForPlayer(defaultPlayer, atIndex: .Index1)
 
         configureGameControllers()
     }
@@ -422,7 +426,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         let player = hero.player
 
         // Remove this hero from our list of heroes
-        for (idx, aHero) in enumerate(heroes) {
+        for (idx, aHero) in heroes.enumerate() {
             if aHero === hero {
                 heroes.removeAtIndex(idx)
                 break
@@ -450,11 +454,11 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: HUD and Scores
 
-    func loadHUDForPlayer(player: Player, atIndex index: Int) {
-        let hudScene: SKScene = SKScene(fileNamed: Constants.hudNodeName)
+    func loadHUDForPlayer(player: Player, atIndex index: GCControllerPlayerIndex) {
+        let hudScene: SKScene = SKScene(fileNamed: Constants.hudNodeName)!
         let hud = hudScene.children.first!.copy() as! SKNode
         hud.name = Constants.hudNodeName
-        hud.position = CGPoint(x: CGFloat(0 + Constants.hudWidth * index), y: frame.size.height)
+        hud.position = CGPoint(x: CGFloat(0 + Constants.hudWidth * index.rawValue), y: frame.size.height)
         addChild(hud)
         player.hudAvatar = hud.childNodeWithName(Constants.hudAvatarName) as! SKSpriteNode
         player.hudScore = hud.childNodeWithName(Constants.hudScoreName) as! SKLabelNode
@@ -490,7 +494,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
         
-        let scene = SKScene(fileNamed: "AdventureWorld")
+        let scene = SKScene(fileNamed: "AdventureWorld")!
         let templateWorld = scene.children.first!.copy() as! SKNode
 
         world.name = "world"
@@ -541,7 +545,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
             cave.timeUntilNextGenerate = 5.0 + 5.0 * unitRandom()
             
             for _ in 0..<Cave.Constants.goblinCapacity {
-                var goblin = Goblin(atPosition: node.position)
+                let goblin = Goblin(atPosition: node.position)
                 goblin.cave = cave
                 cave.inactiveGoblins.append(goblin)
             }
@@ -612,13 +616,13 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func loadBackgroundTiles() {
-        var tileAtlas = SKTextureAtlas(named: "Tiles")
+        let tileAtlas = SKTextureAtlas(named: "Tiles")
 
         for y in 0..<Constants.worldTileDivisor {
             for x in 0..<Constants.worldTileDivisor {
                 let tileNumber = (y * Constants.worldTileDivisor) + x
                 
-                let tileNode = SKSpriteNode(texture: tileAtlas.textureNamed("tile\(tileNumber).png"))
+                let tileNode = SKSpriteNode(texture: tileAtlas.textureNamed("tile\(tileNumber)"))
 
                 let xPosition = CGFloat((x * Constants.worldTileSize) - Constants.worldCenter + Constants.worldTileSize / 2)
                 let yPosition = CGFloat((Constants.worldSize - (y * Constants.worldTileSize)) - Constants.worldCenter  - Constants.worldTileSize / 2)
@@ -649,8 +653,8 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     
     func configureGameControllers() {
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "gameControllerDidConnect:", name: GCControllerDidConnectNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "gameControllerDidDisconnect:", name: GCControllerDidDisconnectNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AdventureScene.gameControllerDidConnect(_:)), name: GCControllerDidConnectNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AdventureScene.gameControllerDidDisconnect(_:)), name: GCControllerDidDisconnectNotification, object: nil)
 
         configureConnectedGameControllers()
 
@@ -658,11 +662,11 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func configureConnectedGameControllers() {
-        let gameControllers = GCController.controllers() as! [GCController]
+        let gameControllers = GCController.controllers()
         
         for controller in gameControllers {
             let playerIndex = controller.playerIndex
-            if playerIndex == GCControllerPlayerIndexUnset {
+            if playerIndex == .IndexUnset {
                 continue
             }
 
@@ -671,7 +675,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
         for controller in gameControllers {
             let playerIndex = controller.playerIndex
-            if playerIndex != GCControllerPlayerIndexUnset {
+            if playerIndex != .IndexUnset {
                 continue
             }
 
@@ -682,7 +686,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     func gameControllerDidConnect(notification: NSNotification) {
         let controller = notification.object as! GCController
         let playerIndex = controller.playerIndex
-        if playerIndex == GCControllerPlayerIndexUnset {
+        if playerIndex == .IndexUnset {
             assignUnknownController(controller)
         }
         else {
@@ -703,7 +707,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     func assignUnknownController(controller: GCController) {
         // Specifically declare `player` as mutable so that we can reassign it while processing.
-        for (index, var player) in enumerate(players) {
+        for (index, var player) in players.enumerate() {
             if player == nil {
                 player = Player()
                 players[index] = player
@@ -713,17 +717,17 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
                 continue
             }
 
-            controller.playerIndex = index
+            controller.playerIndex = GCControllerPlayerIndex(rawValue: index) ?? .IndexUnset
             configureController(controller, forPlayer: player)
             return
         }
     }
 
-    func assignPresetController(controller: GCController, toIndex index: Int) {
-        var player = players[index]
+    func assignPresetController(controller: GCController, toIndex index: GCControllerPlayerIndex) {
+        var player = players[index.rawValue]
         if player == nil {
             player = Player()
-            players[index] = player
+            players[index.rawValue] = player
         }
 
         if player?.controller != nil && player?.controller != controller {

@@ -35,7 +35,7 @@ class ViewController: UIViewController {
         // This effectively scales the cover image to 50%, matching the scene scaling.
         var image = UIImage(named: "cover")!
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            image = UIImage(CGImage: image.CGImage, scale: image.scale * 2.0, orientation: UIImageOrientation.Up)!
+            image = UIImage(CGImage: image.CGImage!, scale: image.scale * 2.0, orientation: UIImageOrientation.Up)
         }
 
         coverView.image = image

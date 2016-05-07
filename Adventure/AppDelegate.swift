@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     @IBOutlet weak var warriorButton: NSButton!
     
     var adventureWindow: NSWindow {
-        let windows = NSApplication.sharedApplication().windows as! [NSWindow]
+        let windows = NSApplication.sharedApplication().windows 
         
         for window in windows {
             if window.isKindOfClass(AdventureWindow.self) {

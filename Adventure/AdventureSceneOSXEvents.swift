@@ -57,7 +57,7 @@ extension AdventureScene {
     // MARK: Convenience
     
     private func handleKeyEvent(event: NSEvent, keyDown: Bool) {
-        if event.modifierFlags & .NumericPadKeyMask == .NumericPadKeyMask {
+        if event.modifierFlags.contains(.NumericPadKeyMask) {
             if let charactersIgnoringModifiers = event.charactersIgnoringModifiers {
                 applyEventsFromEventString(charactersIgnoringModifiers, keyDown: keyDown)
             }

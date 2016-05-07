@@ -10,15 +10,15 @@ import SpriteKit
 
 func loadFramesFromAtlasWithName(atlasName: String) -> [SKTexture] {
     let atlas = SKTextureAtlas(named: atlasName)
-    return sorted(atlas.textureNames as! [String]).map { atlas.textureNamed($0) }
+    return (atlas.textureNames).sort().map { atlas.textureNamed($0) }
 }
 
 func unitRandom() -> CGFloat {
-    let quotient = Double(arc4random()) / Double(UInt32.max)
-    return CGFloat(quotient)
+    let quotient = CGFloat(arc4random()) / CGFloat(UInt32.max)
+    return quotient
 }
 
-// The assets are all facing Y down, so offset by half pi to get into X right facing
+/// The assets are all facing Y down, so offset by half pi to get into X right facing
 func adjustAssetOrientation(r: CGFloat) -> CGFloat {
     return r + (CGFloat(M_PI) * 0.5)
 }
@@ -29,14 +29,14 @@ extension CGPoint {
     }
 
     func radiansToPoint(point: CGPoint) -> CGFloat {
-        var deltaX = point.x - x
-        var deltaY = point.y - y
+        let deltaX = point.x - x
+        let deltaY = point.y - y
 
         return atan2(deltaY, deltaX)
     }
 }
 
-// Adds the coordinates of the two points together.
+/// Adds the coordinates of the two points together.
 func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
     return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
 }
@@ -47,6 +47,6 @@ func runOneShotEmitter(emitter: SKEmitterNode, withDuration duration: CGFloat) {
     let waitAction2 = SKAction.waitForDuration(NSTimeInterval(emitter.particleLifetime + emitter.particleLifetimeRange))
     let removeAction = SKAction.removeFromParent()
 
-    var sequence = [ waitAction, birthRateSet, waitAction2, removeAction]
+    let sequence = [ waitAction, birthRateSet, waitAction2, removeAction]
     emitter.runAction(SKAction.sequence(sequence))
 }

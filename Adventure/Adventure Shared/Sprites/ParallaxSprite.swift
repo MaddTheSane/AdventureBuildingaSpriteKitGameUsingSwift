@@ -28,7 +28,7 @@ class ParallaxSprite: SKSpriteNode {
             if rotation != 0.0 {
                 super.zRotation = 0.0
                 
-                for child in children as! [SKNode] {
+                for child in children {
                     child.zRotation = rotation
                 }
                 
@@ -51,7 +51,7 @@ class ParallaxSprite: SKSpriteNode {
         let zOffset = 1.0 / CGFloat(sprites.count)
 
         let ourZPosition = zPosition
-        for (childNumber, node) in enumerate(sprites) {
+        for (childNumber, node) in sprites.enumerate() {
             node.zPosition = ourZPosition + (zOffset + (zOffset * CGFloat(childNumber)))
             addChild(node)
         }
@@ -84,7 +84,7 @@ class ParallaxSprite: SKSpriteNode {
 
         let delta = parallaxOffset / CGFloat(children.count)
 
-        for (childNumber, child) in enumerate(children as! [SKNode]) {
+        for (childNumber, child) in (children).enumerate() {
             child.position = CGPoint(x: offsetX * delta * CGFloat(childNumber), y: offsetY * delta * CGFloat(childNumber))
         }
 

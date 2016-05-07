@@ -36,8 +36,8 @@ class SpawnArtificialIntelligence: ArtificialIntelligence {
     
     // MARK: Internal Scene Processing Implementation
     
-    // Determines whether or not goblins should be generated based on the current state
-    // of the cave, its goblins, and the hero.
+    /// Determines whether or not goblins should be generated based on the current state
+    /// of the cave, its goblins, and the hero.
     func shouldGenerateGoblin(inout timeUntilNextGenerate: CGFloat) -> Bool {
         // If there are no active goblins, create one!
         if cave.activeGoblins.isEmpty {

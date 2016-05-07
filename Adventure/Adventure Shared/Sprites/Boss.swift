@@ -13,7 +13,7 @@ final class Boss: EnemyCharacter, SharedAssetProvider {
     
     convenience init(atPosition position: CGPoint) {
         let atlas = SKTextureAtlas(named: "Boss_Idle")
-        let bossTexture = atlas.textureNamed("boss_idle_0001.png")
+        let bossTexture = atlas.textureNamed("boss_idle_0001")
         self.init(texture: bossTexture, atPosition: position)
         
         movementSpeed = movementSpeed * 0.35
@@ -94,7 +94,7 @@ final class Boss: EnemyCharacter, SharedAssetProvider {
         attackAnimationFrames = loadFramesFromAtlasWithName("Boss_Attack")
         getHitAnimationFrames = loadFramesFromAtlasWithName("Boss_GetHit")
         deathAnimationFrames = loadFramesFromAtlasWithName("Boss_Death")
-        damageEmitter = SKEmitterNode(fileNamed: "BossDamage")
+        damageEmitter = SKEmitterNode(fileNamed: "BossDamage")!
         
         let actions = [
             SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 1.0, duration: 0.0),

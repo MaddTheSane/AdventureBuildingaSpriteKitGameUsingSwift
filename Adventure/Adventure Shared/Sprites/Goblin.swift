@@ -24,7 +24,7 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
 
     convenience init(atPosition position: CGPoint) {
         let atlas = SKTextureAtlas(named: "Goblin_Idle")
-		let atlasTexture = atlas.textureNamed("goblin_idle_0001.png")
+		let atlasTexture = atlas.textureNamed("goblin_idle_0001")
 
         self.init(texture: atlasTexture, atPosition: position)
 
@@ -63,7 +63,7 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
                 }
             ]
 
-            var actionSequence = SKAction.sequence(actions)
+            let actionSequence = SKAction.sequence(actions)
             runAction(actionSequence)
         }
     }
@@ -91,7 +91,7 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
     override func performDeath() {
         removeAllActions()
 
-        var splort = Goblin.deathSplort.copy() as! SKSpriteNode
+        let splort = Goblin.deathSplort.copy() as! SKSpriteNode
         splort.zPosition = -1.0
         splort.zRotation = unitRandom() * CGFloat(M_PI)
         splort.position = position
@@ -125,8 +125,8 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
         attackAnimationFrames = loadFramesFromAtlasWithName("Goblin_Attack")
         getHitAnimationFrames = loadFramesFromAtlasWithName("Goblin_GetHit")
         deathAnimationFrames = loadFramesFromAtlasWithName("Goblin_Death")
-        damageEmitter = SKEmitterNode(fileNamed: "Damage")
-        deathSplort = SKSpriteNode(texture: atlas.textureNamed("minionSplort.png"))
+        damageEmitter = SKEmitterNode(fileNamed: "Damage")!
+        deathSplort = SKSpriteNode(texture: atlas.textureNamed("minionSplort"))
 
         let actions = [
             SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 1.0, duration: 0.0),

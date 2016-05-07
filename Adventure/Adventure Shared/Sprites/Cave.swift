@@ -36,7 +36,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
     // MARK: NSCopying
     
     override func copyWithZone(zone: NSZone) -> AnyObject {
-        var cave = super.copyWithZone(zone) as! Cave
+        let cave = super.copyWithZone(zone) as! Cave
         cave.smokeEmitter = smokeEmitter?.copy() as? SKEmitterNode
         cave.timeUntilNextGenerate = timeUntilNextGenerate
         cave.activeGoblins = [Goblin]()
@@ -89,7 +89,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         updateSmokeForHealth()
         
         // show damage on parallax stacks
-        for node in children as! [SKNode] {
+        for node in children {
             node.runAction(self.dynamicType.damageAction)
         }
     }
@@ -99,7 +99,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
             return
         }
         
-        var emitter: SKEmitterNode = Cave.deathEmitter.copy() as! SKEmitterNode
+        let emitter: SKEmitterNode = Cave.deathEmitter.copy() as! SKEmitterNode
         emitter.position = position
         emitter.zPosition = -0.8
         smokeEmitter = emitter
@@ -182,7 +182,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
 
     func recycle(goblin: Goblin) {
         goblin.reset()
-        if let index = find(activeGoblins, goblin) {
+        if let index = activeGoblins.indexOf(goblin) {
             activeGoblins.removeAtIndex(index)
         }
         inactiveGoblins.append(goblin)
@@ -194,29 +194,29 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
     class func loadSharedAssets() {
         let atlas = SKTextureAtlas(named: "Environment")
         
-        let fire: SKEmitterNode = SKEmitterNode(fileNamed: "CaveFire")
+        let fire: SKEmitterNode = SKEmitterNode(fileNamed: "CaveFire")!
         fire.zPosition = 1
-        let smoke: SKEmitterNode = SKEmitterNode(fileNamed: "CaveFireSmoke")
+        let smoke: SKEmitterNode = SKEmitterNode(fileNamed: "CaveFireSmoke")!
         
-        var torch = SKNode()
+        let torch = SKNode()
         torch.addChild(fire)
         torch.addChild(smoke)
         
-        var caveBase = SKSpriteNode(texture: atlas.textureNamed("cave_base.png"))
+        let caveBase = SKSpriteNode(texture: atlas.textureNamed("cave_base"))
         
         torch.position = CGPoint(x: 83, y: 83)
         caveBase.addChild(torch)
         
-        var torchB = torch.copy() as! SKNode
+        let torchB = torch.copy() as! SKNode
         torch.position = CGPoint(x: -83, y: 83)
         caveBase.addChild(torchB)
         
-        var caveTop = SKSpriteNode(texture: atlas.textureNamed("cave_top.png"))
+        let caveTop = SKSpriteNode(texture: atlas.textureNamed("cave_top"))
         
-        damageEmitter = SKEmitterNode(fileNamed: "CaveDamage")
-        deathEmitter = SKEmitterNode(fileNamed: "CaveDeathSmoke")
+        damageEmitter = SKEmitterNode(fileNamed: "CaveDamage")!
+        deathEmitter = SKEmitterNode(fileNamed: "CaveDeathSmoke")!
         
-        deathSplort = SKSpriteNode(texture: atlas.textureNamed("cave_destroyed.png"))
+        deathSplort = SKSpriteNode(texture: atlas.textureNamed("cave_destroyed"))
         
         damageAction = SKAction.sequence([
             SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.0),
@@ -224,7 +224,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
             SKAction.colorizeWithColorBlendFactor(0.0, duration:0.1)
         ])
         
-        var sprites = [
+        let sprites = [
             caveBase,
             caveTop
         ]

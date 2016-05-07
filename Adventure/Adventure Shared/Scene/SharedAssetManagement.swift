@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-// Allows adopters to advertise that they have shared assets that require loading and can load them.
+/// Allows adopters to advertise that they have shared assets that require loading and can load them.
 protocol SharedAssetProvider {
     static func loadSharedAssets()
 }
@@ -17,25 +17,25 @@ enum CharacterType {
     case Archer, Warrior, Cave, Goblin, Boss
 }
 
-// This function uses pattern matching to infer the appropriate enum value based on the type provided.
+/// This function uses pattern matching to infer the appropriate enum value based on the type provided.
 func inferCharacterType(fromType: Character.Type) -> CharacterType {
     switch fromType {
         case is Goblin.Type:
-            return CharacterType.Goblin
+            return .Goblin
         case is Cave.Type:
-            return CharacterType.Cave
+            return .Cave
         case is Boss.Type:
-            return CharacterType.Boss
+            return .Boss
         case is Warrior.Type:
-            return CharacterType.Warrior
+            return .Warrior
         case is Archer.Type:
-            return CharacterType.Archer
+            return .Archer
         default:
-            fatalError("Unknown type provided for \(__FUNCTION__).")
+            fatalError("Unknown type provided for \(#function).")
     }
 }
 
-// Holds shared animation textures for the various character types. Keys are provided for the inner dictionary.
+/// Holds shared animation textures for the various character types. Keys are provided for the inner dictionary.
 struct SharedTextures {
     struct Keys {
         static var idle = "textures.idle"
@@ -48,7 +48,7 @@ struct SharedTextures {
     static var textures = [CharacterType: [String: [SKTexture]]]()
 }
 
-// Holds shared sprites for the various character types. Keys are provided for the inner dictionary.
+/// Holds shared sprites for the various character types. Keys are provided for the inner dictionary.
 struct SharedSprites {
     struct Keys {
         static var projectile = "sprites.projectile"
@@ -58,7 +58,7 @@ struct SharedSprites {
     static var sprites = [CharacterType: [String: SKSpriteNode]]()
 }
 
-// Holds shared emitters for the various character types. Keys are provided for the inner dictionary.
+/// Holds shared emitters for the various character types. Keys are provided for the inner dictionary.
 struct SharedEmitters {
     struct Keys {
         static var damage = "emitters.damage"
@@ -69,7 +69,7 @@ struct SharedEmitters {
     static var emitters = [CharacterType: [String: SKEmitterNode]]()
 }
 
-// Holds shared actions for the various character types. Keys are provided for the inner dictionary.
+/// Holds shared actions for the various character types. Keys are provided for the inner dictionary.
 struct SharedActions {
     struct Keys {
         static var damage = "actions.damage"

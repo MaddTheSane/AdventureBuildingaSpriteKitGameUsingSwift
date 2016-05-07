@@ -13,7 +13,7 @@ final class Archer: HeroCharacter, SharedAssetProvider {
 
     convenience init(atPosition: CGPoint, withPlayer: Player) {
         let atlas = SKTextureAtlas(named: "Archer_Idle")
-        let texture = atlas.textureNamed("archer_idle_0001.png")
+        let texture = atlas.textureNamed("archer_idle_0001")
 
         self.init(atPosition: atPosition, withTexture: texture, player: withPlayer)
   	}
@@ -27,7 +27,7 @@ final class Archer: HeroCharacter, SharedAssetProvider {
         getHitAnimationFrames = loadFramesFromAtlasWithName("Archer_GetHit")
         deathAnimationFrames = loadFramesFromAtlasWithName("Archer_Death")
         
-        var archerProjectile = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 2.0, height: 24.0))
+        let archerProjectile = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 2.0, height: 24.0))
         archerProjectile.name = "Projectile"
         
         // Assign the physics body; unwrap the physics body to configure it.
@@ -38,7 +38,7 @@ final class Archer: HeroCharacter, SharedAssetProvider {
         
         projectile = archerProjectile
 
-        projectileEmitter = SKEmitterNode(fileNamed: "ArcherProjectile")
+        projectileEmitter = SKEmitterNode(fileNamed: "ArcherProjectile")!
 
         let actions = [
             SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 10.0, duration: 0.0),

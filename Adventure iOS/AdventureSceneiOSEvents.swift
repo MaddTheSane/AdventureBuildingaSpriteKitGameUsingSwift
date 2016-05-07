@@ -11,7 +11,7 @@ import SpriteKit
 extension AdventureScene {
     // MARK: Touch Handling
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         // If we have no hero, we don't need to update the user interface at all.
         if heroes.isEmpty || touches.count <= 0 {
             return
@@ -23,11 +23,11 @@ extension AdventureScene {
             return
         }
 
-        let touch = touches.first as! UITouch
+        let touch = touches.first!
 
-        defaultPlayer.targetLocation = touch.locationInNode(defaultPlayer.hero!.parent)
+        defaultPlayer.targetLocation = touch.locationInNode(defaultPlayer.hero!.parent!)
 
-        let nodes = nodesAtPoint(touch.locationInNode(self)) as! [SKNode]
+        let nodes = nodesAtPoint(touch.locationInNode(self)) 
 
         let enemyBitmask = ColliderType.GoblinOrBoss.rawValue | ColliderType.Cave.rawValue
 
@@ -47,7 +47,7 @@ extension AdventureScene {
         defaultPlayer.movementTouch = touch
     }
 
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         // If we have no hero, we don't need to update the user interface at all.
         if heroes.isEmpty || touches.count <= 0 {
             return
@@ -57,7 +57,7 @@ extension AdventureScene {
         // touch.
         if let touch = defaultPlayer.movementTouch {
             if touches.contains(touch) {
-                defaultPlayer.targetLocation = touch.locationInNode(defaultPlayer.hero!.parent)
+                defaultPlayer.targetLocation = touch.locationInNode(defaultPlayer.hero!.parent!)
 
                 if !defaultPlayer.fireAction {
                     defaultPlayer.moveRequested = true
@@ -66,7 +66,7 @@ extension AdventureScene {
         }
     }
 
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         // If we have no hero, we don't need to update the user interface at all.
         if heroes.isEmpty || touches.count <= 0 {
             return

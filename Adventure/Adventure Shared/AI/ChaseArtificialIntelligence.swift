@@ -13,8 +13,8 @@ class ChaseArtificialIntelligence: ArtificialIntelligence {
 
     var enemyAlertRadius: CGFloat
     
-    // Bosses and goblins have different attack radii. The default value matches goblins, but should 
-    // change if they correspond to a boss.
+    /// Bosses and goblins have different attack radii. The default value matches goblins, but should
+    /// change if they correspond to a boss.
     var attackRadius: CGFloat
     
     // MARK: Initialization
@@ -66,7 +66,7 @@ class ChaseArtificialIntelligence: ArtificialIntelligence {
             let distance = position.distanceToPoint(heroPosition)
             
             if distance < enemyAlertRadius && distance < closestHeroDistance && !hero.isDying {
-                var canSee = character.characterScene.canSee(heroPosition, from: position)
+                let canSee = character.characterScene.canSee(heroPosition, from: position)
                 
                 if !canSee {
                     continue

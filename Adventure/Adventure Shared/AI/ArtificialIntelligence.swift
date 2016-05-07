@@ -11,10 +11,10 @@ import SpriteKit
 class ArtificialIntelligence {
     // MARK: Properties
 
-    // The character that should be moving towards the target.
+    /// The character that should be moving towards the target.
     var character: Character
     
-    // The target of the AI. This property can be set after initialization.
+    /// The target of the AI. This property can be set after initialization.
     var target: Character?
 
     // MARK: Initializers
@@ -25,7 +25,7 @@ class ArtificialIntelligence {
 
     // MARK: Scene Processing Support
 
-    // This should be overriden in subclasses.
+    /// This should be overriden in subclasses.
     func updateWithTimeSinceLastUpdate(interval: NSTimeInterval) {
        // No implementation required in the base class AI.
     }

@@ -13,7 +13,7 @@ final class Warrior: HeroCharacter, SharedAssetProvider {
 
     convenience init(atPosition position: CGPoint, withPlayer player: Player) {
         let atlas = SKTextureAtlas(named: "Warrior_Idle")
-        let texture = atlas.textureNamed("warrior_idle_0001.png")
+        let texture = atlas.textureNamed("warrior_idle_0001")
 
         self.init(atPosition:position, withTexture: texture, player:player)
     }
@@ -29,7 +29,7 @@ final class Warrior: HeroCharacter, SharedAssetProvider {
         getHitAnimationFrames = loadFramesFromAtlasWithName("Warrior_GetHit")
         deathAnimationFrames = loadFramesFromAtlasWithName("Warrior_Death")
 
-        var warriorProjectile = SKSpriteNode(texture: atlas.textureNamed("warrior_throw_hammer.png"))
+        let warriorProjectile = SKSpriteNode(texture: atlas.textureNamed("warrior_throw_hammer"))
         warriorProjectile.name = "Projectile"
         
         // Assign the physics body; unwrap the physics body to configure it.
@@ -40,6 +40,6 @@ final class Warrior: HeroCharacter, SharedAssetProvider {
         
         projectile = warriorProjectile
 
-        projectileEmitter = SKEmitterNode(fileNamed: "WarriorProjectile")
+        projectileEmitter = SKEmitterNode(fileNamed: "WarriorProjectile")!
     }
 }
