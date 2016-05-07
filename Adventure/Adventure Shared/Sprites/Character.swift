@@ -232,7 +232,8 @@ class Character: ParallaxSprite {
     
     func collidedWith(other: SKPhysicsBody) {}
     
-    func applyDamage(var damage: Double, projectile: SKNode? = nil) -> Bool {
+    func applyDamage( damage1: Double, projectile: SKNode? = nil) -> Bool {
+        var damage = damage1
         if let proj = projectile {
             damage *= Double(proj.alpha)
         }

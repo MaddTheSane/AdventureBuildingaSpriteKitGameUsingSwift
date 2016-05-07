@@ -176,7 +176,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
 
             activeGoblins.append(goblin)
 
-            Shared.goblinAllocation++
+            Shared.goblinAllocation += 1
         }
     }
 
@@ -186,7 +186,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
             activeGoblins.removeAtIndex(index)
         }
         inactiveGoblins.append(goblin)
-        Shared.goblinAllocation--
+        Shared.goblinAllocation -= 1
     }
     
     // MARK: Asset Pre-loading

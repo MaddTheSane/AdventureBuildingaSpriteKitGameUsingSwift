@@ -438,7 +438,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         player.moveRequested = false
         #endif
 
-        --player.livesLeft
+        player.livesLeft -= 1
 
         if player.livesLeft < 0 {
             // In a real game, you'd want to end the game when there are no lives left.
