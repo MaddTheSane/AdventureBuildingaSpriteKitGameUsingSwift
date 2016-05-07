@@ -53,8 +53,6 @@
 		383738821884C616008A03B2 /* Cave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383738811884C616008A03B2 /* Cave.swift */; };
 		386E5476188352DB009BBDC0 /* Tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386E5475188352DB009BBDC0 /* Tree.swift */; };
 		389842C318999B4A00FBCB05 /* magicmissile.caf in Resources */ = {isa = PBXBuildFile; fileRef = 38A86E3418871BDB00D300AB /* magicmissile.caf */; };
-		389842C418999B5400FBCB05 /* map_level.png in Resources */ = {isa = PBXBuildFile; fileRef = 38E91D301880C8E4006CA729 /* map_level.png */; };
-		389842C518999B5400FBCB05 /* map_trees.png in Resources */ = {isa = PBXBuildFile; fileRef = 38E91D311880C8E4006CA729 /* map_trees.png */; };
 		389842C618999F8000FBCB05 /* AdventureScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38997C03187F7B2800FAAB91 /* AdventureScene.swift */; };
 		389842C818999F8000FBCB05 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB1985188232F2008CC889 /* Player.swift */; };
 		389842C918999F8400FBCB05 /* ParallaxSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FCBAA3188223B40017B9D2 /* ParallaxSprite.swift */; };
@@ -86,8 +84,6 @@
 		38CB1984188232C3008CC889 /* HeroCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB1983188232C3008CC889 /* HeroCharacter.swift */; };
 		38CB1986188232F2008CC889 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB1985188232F2008CC889 /* Player.swift */; };
 		38CB198818823580008CC889 /* Warrior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB198718823580008CC889 /* Warrior.swift */; };
-		38E91D321880C8E4006CA729 /* map_level.png in Resources */ = {isa = PBXBuildFile; fileRef = 38E91D301880C8E4006CA729 /* map_level.png */; };
-		38E91D331880C8E4006CA729 /* map_trees.png in Resources */ = {isa = PBXBuildFile; fileRef = 38E91D311880C8E4006CA729 /* map_trees.png */; };
 		38FCBAA4188223B40017B9D2 /* ParallaxSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FCBAA3188223B40017B9D2 /* ParallaxSprite.swift */; };
 		38FCBAA61882276F0017B9D2 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FCBAA51882276F0017B9D2 /* Character.swift */; };
 		553036AB1CDE266A007FA704 /* lives.png in Resources */ = {isa = PBXBuildFile; fileRef = 38FE6C751884CCF500646ED4 /* lives.png */; };
@@ -470,8 +466,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				389842C418999B5400FBCB05 /* map_level.png in Resources */,
-				389842C518999B5400FBCB05 /* map_trees.png in Resources */,
 				389842C318999B4A00FBCB05 /* magicmissile.caf in Resources */,
 				380C6FB418999B0E00AE7608 /* ArcherProjectile.sks in Resources */,
 				380C6FB618999B0E00AE7608 /* CaveDamage.sks in Resources */,
@@ -505,7 +499,6 @@
 			files = (
 				38280E4C1884B3890017B525 /* Death.sks in Resources */,
 				38280E4B1884B3890017B525 /* Damage.sks in Resources */,
-				38E91D321880C8E4006CA729 /* map_level.png in Resources */,
 				553036AB1CDE266A007FA704 /* lives.png in Resources */,
 				38280E501884B3890017B525 /* Leaves_01.sks in Resources */,
 				553993161BB9B5C500735879 /* Particles.xcassets in Resources */,
@@ -517,7 +510,6 @@
 				38280E521884B3890017B525 /* ProjectileSplat.sks in Resources */,
 				38A86E3518871BDB00D300AB /* magicmissile.caf in Resources */,
 				38280E471884B3890017B525 /* CaveDamage.sks in Resources */,
-				38E91D331880C8E4006CA729 /* map_trees.png in Resources */,
 				38280E481884B3890017B525 /* CaveDeathSmoke.sks in Resources */,
 				38280E4A1884B3890017B525 /* CaveFireSmoke.sks in Resources */,
 				38280E491884B3890017B525 /* CaveFire.sks in Resources */,

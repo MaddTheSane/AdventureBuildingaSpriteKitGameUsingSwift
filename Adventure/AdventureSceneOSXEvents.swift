@@ -11,7 +11,7 @@ import SpriteKit
 extension AdventureScene {
     // MARK: Types
     
-    // Represents different types of user input that result in actions.
+    /// Represents different types of user input that result in actions.
     private enum KeyEventFlag {
         case MoveForward
         case MoveLeft
@@ -19,7 +19,7 @@ extension AdventureScene {
         case MoveBackward
         case Fire
 
-        // The mapping from key events to their player actions.
+        /// The mapping from key events to their player actions.
         private static let keyMapping: [UnicodeScalar: KeyEventFlag] = [
             "w":                    .MoveForward,
             UnicodeScalar(0xF700):  .MoveForward,
