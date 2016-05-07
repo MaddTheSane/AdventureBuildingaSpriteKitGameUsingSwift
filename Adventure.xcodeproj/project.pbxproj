@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		169BC01419EC84CF00CE9246 /* cover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 169BC01319EC84CF00CE9246 /* cover@2x.png */; };
-		169BC01619EC89AB00CE9246 /* cover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 169BC01319EC84CF00CE9246 /* cover@2x.png */; };
 		16A18239189988A000E7758D /* GraphicsUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A9A57D1891E6650091825F /* GraphicsUtilities.swift */; };
 		16AA601B19D61E7E00767D31 /* editor_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 16AA601A19D61E7E00767D31 /* editor_background.png */; };
 		16AA601C19D61E7E00767D31 /* editor_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 16AA601A19D61E7E00767D31 /* editor_background.png */; };
@@ -23,7 +21,6 @@
 		16F418B9189976EF00710C70 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F418B8189976EF00710C70 /* ViewController.swift */; };
 		2277D59D18998F9800986F85 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2277D59C18998F9800986F85 /* Main.storyboard */; };
 		380C6FB118999AF200AE7608 /* lives.png in Resources */ = {isa = PBXBuildFile; fileRef = 38FE6C751884CCF500646ED4 /* lives.png */; };
-		380C6FB218999AF200AE7608 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 38FE6C761884CCF500646ED4 /* logo.png */; };
 		380C6FB418999B0E00AE7608 /* ArcherProjectile.sks in Resources */ = {isa = PBXBuildFile; fileRef = 38280E331884B3890017B525 /* ArcherProjectile.sks */; };
 		380C6FB518999B0E00AE7608 /* BossDamage.sks in Resources */ = {isa = PBXBuildFile; fileRef = 38280E341884B3890017B525 /* BossDamage.sks */; };
 		380C6FB618999B0E00AE7608 /* CaveDamage.sks in Resources */ = {isa = PBXBuildFile; fileRef = 38280E351884B3890017B525 /* CaveDamage.sks */; };
@@ -98,11 +95,11 @@
 		553993171BB9B73100735879 /* Particles.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5538B49C1BB730F300DB8AC0 /* Particles.xcassets */; };
 		5544F7841B3F09940078214A /* Texture Atlases.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5544F7831B3F09940078214A /* Texture Atlases.xcassets */; };
 		5544F7851B3F09940078214A /* Texture Atlases.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5544F7831B3F09940078214A /* Texture Atlases.xcassets */; };
+		5556979D1CDE5C0600BBDE66 /* iOS Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5556979C1CDE5C0600BBDE66 /* iOS Assets.xcassets */; };
 		55FEFEAB1B164B9D00D5CFF9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38FE6C6A1884CCF500646ED4 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		169BC01319EC84CF00CE9246 /* cover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cover@2x.png"; sourceTree = "<group>"; };
 		16AA601A19D61E7E00767D31 /* editor_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = editor_background.png; sourceTree = "<group>"; };
 		16BAD0BF19D48568006AA654 /* AdventureHUD.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AdventureHUD.sks; sourceTree = "<group>"; };
 		16BAD0C019D48568006AA654 /* AdventureWorld.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AdventureWorld.sks; sourceTree = "<group>"; };
@@ -164,10 +161,10 @@
 		38FCBAA51882276F0017B9D2 /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		38FE6C6A1884CCF500646ED4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		38FE6C751884CCF500646ED4 /* lives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lives.png; sourceTree = "<group>"; };
-		38FE6C761884CCF500646ED4 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		5538B49C1BB730F300DB8AC0 /* Particles.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Particles.xcassets; sourceTree = "<group>"; };
 		5538B49F1BB7329800DB8AC0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		5544F7831B3F09940078214A /* Texture Atlases.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Texture Atlases.xcassets"; sourceTree = "<group>"; };
+		5556979C1CDE5C0600BBDE66 /* iOS Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "iOS Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +203,7 @@
 			children = (
 				16F418AA189976EF00710C70 /* Adventure iOS-Info.plist */,
 				16F418AB189976EF00710C70 /* InfoPlist.strings */,
+				5556979C1CDE5C0600BBDE66 /* iOS Assets.xcassets */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -384,10 +382,8 @@
 		38FE6C691884CCF500646ED4 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				169BC01319EC84CF00CE9246 /* cover@2x.png */,
 				38FE6C6A1884CCF500646ED4 /* Assets.xcassets */,
 				38FE6C751884CCF500646ED4 /* lives.png */,
-				38FE6C761884CCF500646ED4 /* logo.png */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -484,9 +480,9 @@
 				16AA601C19D61E7E00767D31 /* editor_background.png in Resources */,
 				380C6FB718999B0E00AE7608 /* CaveDeathSmoke.sks in Resources */,
 				380C6FC518999B0E00AE7608 /* WarriorProjectile.sks in Resources */,
-				169BC01619EC89AB00CE9246 /* cover@2x.png in Resources */,
 				380C6FC018999B0E00AE7608 /* Leaves_02.sks in Resources */,
 				380C6FB118999AF200AE7608 /* lives.png in Resources */,
+				5556979D1CDE5C0600BBDE66 /* iOS Assets.xcassets in Resources */,
 				553993171BB9B73100735879 /* Particles.xcassets in Resources */,
 				380C6FB918999B0E00AE7608 /* CaveFireSmoke.sks in Resources */,
 				16F418AD189976EF00710C70 /* InfoPlist.strings in Resources */,
@@ -495,7 +491,6 @@
 				3820DF30189990600082333B /* Assets.xcassets in Resources */,
 				380C6FBA18999B0E00AE7608 /* Damage.sks in Resources */,
 				16BAD0C219D48568006AA654 /* AdventureHUD.sks in Resources */,
-				380C6FB218999AF200AE7608 /* logo.png in Resources */,
 				380C6FBB18999B0E00AE7608 /* Death.sks in Resources */,
 				380C6FB818999B0E00AE7608 /* CaveFire.sks in Resources */,
 				380C6FBF18999B0E00AE7608 /* Leaves_01.sks in Resources */,
@@ -520,7 +515,6 @@
 				16AA601B19D61E7E00767D31 /* editor_background.png in Resources */,
 				38280E511884B3890017B525 /* Leaves_02.sks in Resources */,
 				38280E521884B3890017B525 /* ProjectileSplat.sks in Resources */,
-				169BC01419EC84CF00CE9246 /* cover@2x.png in Resources */,
 				38A86E3518871BDB00D300AB /* magicmissile.caf in Resources */,
 				38280E471884B3890017B525 /* CaveDamage.sks in Resources */,
 				38E91D331880C8E4006CA729 /* map_trees.png in Resources */,
