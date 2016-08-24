@@ -14,22 +14,22 @@ protocol SharedAssetProvider {
 }
 
 enum CharacterType {
-    case Archer, Warrior, Cave, Goblin, Boss
+    case archer, warrior, cave, goblin, boss
 }
 
 /// This function uses pattern matching to infer the appropriate enum value based on the type provided.
-func inferCharacterType(fromType: Character.Type) -> CharacterType {
+func inferCharacterType(_ fromType: Character.Type) -> CharacterType {
     switch fromType {
         case is Goblin.Type:
-            return .Goblin
+            return .goblin
         case is Cave.Type:
-            return .Cave
+            return .cave
         case is Boss.Type:
-            return .Boss
+            return .boss
         case is Warrior.Type:
-            return .Warrior
+            return .warrior
         case is Archer.Type:
-            return .Archer
+            return .archer
         default:
             fatalError("Unknown type provided for \(#function).")
     }

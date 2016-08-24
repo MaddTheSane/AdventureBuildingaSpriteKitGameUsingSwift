@@ -440,6 +440,9 @@
 					16F418A6189976EF00710C70 = {
 						DevelopmentTeam = AZAE6TWF2Z;
 					};
+					38997BE6187F688800FAAB91 = {
+						LastSwiftMigration = 0800;
+					};
 				};
 			};
 			buildConfigurationList = 38997BE2187F688800FAAB91 /* Build configuration list for PBXProject "Adventure" */;
@@ -742,6 +745,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -761,6 +765,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

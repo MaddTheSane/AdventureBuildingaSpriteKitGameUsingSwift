@@ -13,11 +13,11 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     // MARK: Types
     
     enum WorldLayer: Int {
-        case Ground = 0
-        case BelowCharacter
-        case Character
-        case AboveCharacter
-        case Top
+        case ground = 0
+        case belowCharacter
+        case character
+        case aboveCharacter
+        case top
     }
     
     struct Constants {
@@ -39,7 +39,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         
         static let hudWidth = 300
         
-        static let backgroundQueue = dispatch_queue_create("com.example.apple-samplecode.Adventure.backgroundQueue", DISPATCH_QUEUE_SERIAL)
+        static let backgroundQueue = DispatchQueue(label: "com.example.apple-samplecode.Adventure.backgroundQueue", attributes: [])
     }
     
     // MARK: Properties
@@ -76,7 +76,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     var hudScore: SKLabelNode!
     var hudLifeHearts = [SKSpriteNode]()
 
-    var defaultSpawnPoint = CGPointZero
+    var defaultSpawnPoint = CGPoint.zero
     var defaultPlayer = Player()
     
     /**
@@ -84,17 +84,17 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         player will be populated during initialization at index 0. Subsequent players will be added as needed 
         during game controller connection up to a maximum of 4.
     */
-    var players: [Player!] = [nil, nil, nil, nil]
+    var players: [Player?] = [nil, nil, nil, nil]
 
     /// Properties to keep track of details important to scene updates.
     var worldMovedForUpdate = false
-    var lastUpdateTimeInterval: NSTimeInterval = 0
+    var lastUpdateTimeInterval: TimeInterval = 0
 
     // Set to `true` to cheat and start the level next to the boss.
     let shouldCheat = false
     
     /// A closure to be called when `didMoveToView(_:)` completes.
-    var finishedMovingToView: Void -> Void = {}
+    var finishedMovingToView: (Void) -> Void = {}
     
     // MARK: Initializers
     
@@ -115,27 +115,27 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: SKView Behaviors
 
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         // Complete the loading on a background queue to not take up the main queue's resources.
-        dispatch_async(Constants.backgroundQueue) {
+        Constants.backgroundQueue.async {
             self.loadWorld()
             
             self.centerWorldOnPosition(self.defaultSpawnPoint)
 
-            dispatch_async(dispatch_get_main_queue(), self.finishedMovingToView)
+            DispatchQueue.main.async(execute: self.finishedMovingToView)
         }
     }
 
-    override func didChangeSize(oldSize: CGSize) {
-        enumerateChildNodesWithName(Constants.hudNodeName) { hud, stop in
+    override func didChangeSize(_ oldSize: CGSize) {
+        enumerateChildNodes(withName: Constants.hudNodeName) { hud, stop in
             hud.position = CGPoint(x: hud.position.x, y: self.frame.size.height)
         }
     }
 
     // MARK: Scene Processing Support
 
-    override func update(currentTime: NSTimeInterval) {
-        if paused {
+    override func update(_ currentTime: TimeInterval) {
+        if isPaused {
             lastUpdateTimeInterval = currentTime
             
             return
@@ -185,11 +185,11 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
             }
 
             // If the player has no assigned hero or their hero is isDying, move on.
-            if player.hero == nil || player.hero!.isDying {
+            if player?.hero == nil || (player!.hero!.isDying) {
                 continue
             }
 
-            let hero = player.hero!
+            let hero = player!.hero!
 
             /*
                 Player movement input will be provided via `heroMoveDirection` or individual movements via
@@ -197,9 +197,9 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
                 is populated when input is received from a controller. The individual movement details are 
                 received when using keyboard input.
             */
-            if let heroMoveDirection = player.heroMoveDirection {
+            if let heroMoveDirection = player?.heroMoveDirection {
                 var moveFacing: CGPoint?
-                if let heroFaceLocation = player.heroFaceLocation {
+                if let heroFaceLocation = player?.heroFaceLocation {
                     moveFacing = heroFaceLocation
                 }
                 
@@ -209,33 +209,33 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             else {
-                if let heroFaceLocation = player.heroFaceLocation {
-                    hero.faceToPosition(heroFaceLocation)
+                if let heroFaceLocation = player?.heroFaceLocation {
+                    hero.face(position: heroFaceLocation)
                 }
                 
-                if player.moveForward {
-                    hero.moveInMoveDirection(.Forward, withTimeInterval: timeSinceLast)
+                if (player?.moveForward)! {
+                    hero.moveIn(direction: .forward, timeInterval: timeSinceLast)
                 }
-                else if player.moveBackward {
-                    hero.moveInMoveDirection(.Back, withTimeInterval: timeSinceLast)
+                else if (player?.moveBackward)! {
+                    hero.moveIn(direction: .back, timeInterval: timeSinceLast)
                 }
 
-                if player.moveLeft {
-                    hero.moveInMoveDirection(.Left, withTimeInterval: timeSinceLast)
+                if (player?.moveLeft)! {
+                    hero.moveIn(direction: .left, timeInterval: timeSinceLast)
                 }
-                else if player.moveRight {
-                    hero.moveInMoveDirection(.Right, withTimeInterval: timeSinceLast)
+                else if (player?.moveRight)! {
+                    hero.moveIn(direction: .right, timeInterval: timeSinceLast)
                 }
             }
 
-            if player.fireAction {
+            if (player?.fireAction)! {
                 hero.performAttackAction()
             }
         }
     }
 
     override func didSimulatePhysics() {
-        if paused {
+        if isPaused {
             return
         }
         
@@ -272,7 +272,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    func updateWithTimeSinceLastUpdate(timeSinceLast: NSTimeInterval) {
+    func updateWithTimeSinceLastUpdate(_ timeSinceLast: TimeInterval) {
         for hero in heroes {
             hero.updateWithTimeSinceLastUpdate(timeSinceLast)
         }
@@ -299,10 +299,10 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
         for emitter in particleSystems {
             let emitterIsVisible = (emitter.position.distanceToPoint(position) < 1024)
-            if !emitterIsVisible && !emitter.paused {
-                emitter.paused = true
-            } else if emitterIsVisible && emitter.paused {
-                emitter.paused = false
+            if !emitterIsVisible && !emitter.isPaused {
+                emitter.isPaused = true
+            } else if emitterIsVisible && emitter.isPaused {
+                emitter.isPaused = false
             }
         }
 
@@ -315,7 +315,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: SKPhysicsContactDelegate
 
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
         if let character = contact.bodyA.node as? Character {
             character.collidedWith(contact.bodyB)
         }
@@ -331,10 +331,10 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         if bodyAIsProjectile || bodyBIsProjectile {
             // Conditionally set `bodyA` as the projectile; if it isn't then `bodyB` is the projectile.
             if let projectile = bodyAIsProjectile ? contact.bodyA.node : contact.bodyB.node {
-                projectile.runAction(SKAction.removeFromParent())
+                projectile.run(SKAction.removeFromParent())
                 
                 let emitter = projectileSparkEmitterTemplate.copy() as! SKEmitterNode
-                addNode(emitter, atWorldLayer: .AboveCharacter)
+                addNode(emitter, atWorldLayer: .aboveCharacter)
                 emitter.position = projectile.position
 
                 runOneShotEmitter(emitter, withDuration: 0.15)
@@ -344,7 +344,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: Game Start
 
-    func startLevel(heroType: Player.HeroType) {
+    func startLevel(_ heroType: Player.HeroType) {
         defaultPlayer.heroType = heroType
         addHeroForPlayer(defaultPlayer)
         
@@ -356,22 +356,22 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
 
         // Setup the HUD for the default player.
-        loadHUDForPlayer(defaultPlayer, atIndex: .Index1)
+        loadHUDForPlayer(defaultPlayer, atIndex: .index1)
 
         configureGameControllers()
     }
 
     // MARK: Character Support
 
-    func canSee(point: CGPoint, from vantagePoint: CGPoint) -> Bool {
+    func canSee(_ point: CGPoint, from vantagePoint: CGPoint) -> Bool {
         let rayStart = vantagePoint
         let rayEnd = point
 
         var wallFound = false
-        physicsWorld.enumerateBodiesAlongRayStart(rayStart, end: rayEnd) { body, point, normal, stop in
+        physicsWorld.enumerateBodies(alongRayStart: rayStart, end: rayEnd) { body, point, normal, stop in
             if body.categoryBitMask & ColliderType.Wall.rawValue == ColliderType.Wall.rawValue {
                 wallFound = true
-                stop.memory = true
+                stop.pointee = true
             }
         }
 
@@ -380,7 +380,8 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: Hero Interactions
 
-    func addHeroForPlayer(player: Player) -> HeroCharacter {
+    @discardableResult
+    func addHeroForPlayer(_ player: Player) -> HeroCharacter {
         if let hero = player.hero {
             if !hero.isDying {
                 hero.removeFromParent()
@@ -397,20 +398,20 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
         var hero: HeroCharacter
         switch player.heroType! {
-            case .Warrior:
+            case .warrior:
                 hero = Warrior(atPosition: spawnPosition, withPlayer: player)
 
-            case .Archer:
+            case .archer:
                 hero = Archer(atPosition: spawnPosition, withPlayer: player)
         }
 
         let emitter = spawnEmitterTemplate.copy() as! SKEmitterNode
         emitter.position = spawnPosition
-        addNode(emitter, atWorldLayer: .AboveCharacter)
+        addNode(emitter, atWorldLayer: .aboveCharacter)
         runOneShotEmitter(emitter, withDuration: 0.15)
 
         hero.fadeIn(2.0)
-        hero.addToScene(self)
+        hero.add(to: self)
         heroes.append(hero)
 
         player.hero = hero
@@ -418,7 +419,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         return hero
     }
 
-    func heroWasKilled(hero: HeroCharacter) {
+    func heroWasKilled(_ hero: HeroCharacter) {
         for cave in goblinCaves {
             cave.stopGoblinsFromTargettingHero(hero)
         }
@@ -426,9 +427,9 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         let player = hero.player
 
         // Remove this hero from our list of heroes
-        for (idx, aHero) in heroes.enumerate() {
+        for (idx, aHero) in heroes.enumerated() {
             if aHero === hero {
-                heroes.removeAtIndex(idx)
+                heroes.remove(at: idx)
                 break
             }
         }
@@ -438,50 +439,50 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         player.moveRequested = false
         #endif
 
-        player.livesLeft -= 1
+        player?.livesLeft -= 1
 
-        if player.livesLeft < 0 {
+        if (player?.livesLeft)! < 0 {
             // In a real game, you'd want to end the game when there are no lives left.
             return
         }
 
         updateHUDAfterHeroDeathForPlayer(hero.player)
 
-        let hero = addHeroForPlayer(player)
+        let hero = addHeroForPlayer(player!)
 
         centerWorldOnCharacter(hero)
     }
 
     // MARK: HUD and Scores
 
-    func loadHUDForPlayer(player: Player, atIndex index: GCControllerPlayerIndex) {
+    func loadHUDForPlayer(_ player: Player, atIndex index: GCControllerPlayerIndex) {
         let hudScene: SKScene = SKScene(fileNamed: Constants.hudNodeName)!
         let hud = hudScene.children.first!.copy() as! SKNode
         hud.name = Constants.hudNodeName
         hud.position = CGPoint(x: CGFloat(0 + Constants.hudWidth * index.rawValue), y: frame.size.height)
         addChild(hud)
-        player.hudAvatar = hud.childNodeWithName(Constants.hudAvatarName) as! SKSpriteNode
-        player.hudScore = hud.childNodeWithName(Constants.hudScoreName) as! SKLabelNode
-        hud.enumerateChildNodesWithName(Constants.hudHeartName) { node, stop in
+        player.hudAvatar = hud.childNode(withName: Constants.hudAvatarName) as! SKSpriteNode
+        player.hudScore = hud.childNode(withName: Constants.hudScoreName) as! SKLabelNode
+        hud.enumerateChildNodes(withName: Constants.hudHeartName) { node, stop in
             player.hudLifeHearts.append(node as! SKSpriteNode)
         }
 
         updateHUDForPlayer(player)
     }
 
-    func updateHUDForPlayer(player: Player) {
+    func updateHUDForPlayer(_ player: Player) {
         player.hudScore.text = String.localizedStringWithFormat(NSLocalizedString("SCORE: %d", comment: ""), player.score)
     }
 
-    func updateHUDAfterHeroDeathForPlayer(player: Player) {
+    func updateHUDAfterHeroDeathForPlayer(_ player: Player) {
         // Fade out the relevant heart - one-based livesLeft has already been decremented.
         let heartNumber = player.livesLeft
 
         let heart = player.hudLifeHearts[heartNumber]
-        heart.runAction(SKAction.fadeAlphaTo(0.0, duration: 3.0))
+        heart.run(SKAction.fadeAlpha(to: 0.0, duration: 3.0))
     }
 
-    func addToScore(amount: Int, afterEnemyKillWithProjectile projectile: SKNode) {
+    func addToScore(_ amount: Int, afterEnemyKillWithProjectile projectile: SKNode) {
         if let player = projectile.userData?[Player.Keys.projectileUserDataPlayer] as? Player {
             player.score += amount
             updateHUDForPlayer(player)
@@ -507,8 +508,8 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         populateTreesFromWorld(templateWorld)
     }
 
-    func populateLayersFromWorld(fromWorld: SKNode) {
-        fromWorld.enumerateChildNodesWithName("layer*") { node, stop in
+    func populateLayersFromWorld(_ fromWorld: SKNode) {
+        fromWorld.enumerateChildNodes(withName: "layer*") { node, stop in
             let layer = SKNode()
             layer.name = node.name
             self.world.addChild(layer)
@@ -518,27 +519,27 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     func populateBackgroundTiles() {
         for tileNode in backgroundTiles {
-            addNode(tileNode, atWorldLayer: .Ground)
+            addNode(tileNode, atWorldLayer: .ground)
         }
     }
 
-    func populateWallsFromWorld(fromWorld: SKNode) {
-        let ground = fromWorld.childNodeWithName("layerGround")!
-        ground.enumerateChildNodesWithName("wall") { node, stop in
+    func populateWallsFromWorld(_ fromWorld: SKNode) {
+        let ground = fromWorld.childNode(withName: "layerGround")!
+        ground.enumerateChildNodes(withName: "wall") { node, stop in
             // Unwrap the physics body to configure it.
             let wallNode = node.copy() as! SKNode
-            wallNode.physicsBody!.dynamic = false
+            wallNode.physicsBody!.isDynamic = false
             wallNode.physicsBody!.categoryBitMask = ColliderType.Wall.rawValue
-            self.addNode(wallNode, atWorldLayer: .Ground)
+            self.addNode(wallNode, atWorldLayer: .ground)
         }
     }
 
-    func populateCharactersFromWorld(fromWorld: SKNode) {
-        defaultSpawnPoint = fromWorld.childNodeWithName("//defaultSpawnPoint")!.position
-        levelBoss = Boss(atPosition: fromWorld.childNodeWithName("//boss")!.position)
-        levelBoss.addToScene(self)
+    func populateCharactersFromWorld(_ fromWorld: SKNode) {
+        defaultSpawnPoint = fromWorld.childNode(withName: "//defaultSpawnPoint")!.position
+        levelBoss = Boss(atPosition: fromWorld.childNode(withName: "//boss")!.position)
+        levelBoss.add(to: self)
         
-        fromWorld.enumerateChildNodesWithName("//cave") { node, stop in
+        fromWorld.enumerateChildNodes(withName: "//cave") { node, stop in
             let cave = Cave.Shared.template.copy() as! Cave
             cave.position = node.position
             cave.zRotation = node.zRotation
@@ -555,12 +556,12 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
             self.goblinCaves.append(cave)
             self.parallaxSprites.append(cave)
-            cave.addToScene(self)
+            cave.add(to: self)
         }
     }
 
-    func populateTreesFromWorld(fromWorld: SKNode) {
-        fromWorld.enumerateChildNodesWithName("//*Tree") { node, stop in
+    func populateTreesFromWorld(_ fromWorld: SKNode) {
+        fromWorld.enumerateChildNodes(withName: "//*Tree") { node, stop in
             var tree: Tree
             switch node.name {
             case let name where name == "smallTree":
@@ -576,8 +577,8 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
                 }
 
                 emitter.position = node.position
-                emitter.paused = true
-                self.addNode(emitter, atWorldLayer: .AboveCharacter)
+                emitter.isPaused = true
+                self.addNode(emitter, atWorldLayer: .aboveCharacter)
                 self.particleSystems.append(emitter)
             default:
                 return
@@ -585,13 +586,13 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
             tree.position = node.position
             tree.zRotation = unitRandom()
-            self.addNode(tree, atWorldLayer: .Top)
+            self.addNode(tree, atWorldLayer: .top)
             self.parallaxSprites.append(tree)
             self.trees.append(tree)
         }
     }
 
-    func addNode(node: SKNode, atWorldLayer layer: WorldLayer) {
+    func addNode(_ node: SKNode, atWorldLayer layer: WorldLayer) {
         let layerNode = layers[layer.rawValue]
 
         layerNode.addChild(node)
@@ -599,8 +600,8 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: Asset Pre-loading
     
-    class func loadSceneAssetsWithCompletionHandler(completionHandler: AdventureScene -> Void) {
-        dispatch_async(Constants.backgroundQueue) {
+    class func loadSceneAssetsWithCompletionHandler(_ completionHandler: @escaping (AdventureScene) -> Void) {
+        Constants.backgroundQueue.async {
             Tree.loadSharedAssets()
             Warrior.loadSharedAssets()
             Archer.loadSharedAssets()
@@ -611,7 +612,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
             let loadedScene = AdventureScene(size: CGSize(width: 1024, height: 768))
             loadedScene.loadBackgroundTiles()
             
-            dispatch_async(dispatch_get_main_queue()) { completionHandler(loadedScene) }
+            DispatchQueue.main.async { completionHandler(loadedScene) }
         }
     }
 
@@ -631,7 +632,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
                 tileNode.position = position
                 tileNode.zPosition = -1.0
-                tileNode.blendMode = .Replace
+                tileNode.blendMode = .replace
                 backgroundTiles.append(tileNode)
             }
         }
@@ -639,26 +640,26 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: Camera Convenience
     
-    func centerWorldOnPosition(position: CGPoint) {
-        world.position = CGPoint(x: -position.x + CGRectGetMidX(frame),
-            y: -position.y + CGRectGetMidY(frame))
+    func centerWorldOnPosition(_ position: CGPoint) {
+        world.position = CGPoint(x: -position.x + frame.midX,
+            y: -position.y + frame.midY)
         worldMovedForUpdate = true
     }
 
-    func centerWorldOnCharacter(character: Character) {
+    func centerWorldOnCharacter(_ character: Character) {
         centerWorldOnPosition(character.position)
     }
 
     // MARK: Game Controllers
     
     func configureGameControllers() {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(AdventureScene.gameControllerDidConnect(_:)), name: GCControllerDidConnectNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AdventureScene.gameControllerDidDisconnect(_:)), name: GCControllerDidDisconnectNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(AdventureScene.gameControllerDidConnect(_:)), name: NSNotification.Name.GCControllerDidConnect, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AdventureScene.gameControllerDidDisconnect(_:)), name: NSNotification.Name.GCControllerDidDisconnect, object: nil)
 
         configureConnectedGameControllers()
 
-        GCController.startWirelessControllerDiscoveryWithCompletionHandler(nil)
+        GCController.startWirelessControllerDiscovery(completionHandler: nil)
     }
 
     func configureConnectedGameControllers() {
@@ -666,7 +667,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         
         for controller in gameControllers {
             let playerIndex = controller.playerIndex
-            if playerIndex == .IndexUnset {
+            if playerIndex == .indexUnset {
                 continue
             }
 
@@ -675,7 +676,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
         for controller in gameControllers {
             let playerIndex = controller.playerIndex
-            if playerIndex != .IndexUnset {
+            if playerIndex != .indexUnset {
                 continue
             }
 
@@ -683,10 +684,10 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    func gameControllerDidConnect(notification: NSNotification) {
+    func gameControllerDidConnect(_ notification: Notification) {
         let controller = notification.object as! GCController
         let playerIndex = controller.playerIndex
-        if playerIndex == .IndexUnset {
+        if playerIndex == .indexUnset {
             assignUnknownController(controller)
         }
         else {
@@ -694,7 +695,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    func gameControllerDidDisconnect(notification: NSNotification) {
+    func gameControllerDidDisconnect(_ notification: Notification) {
         let controller = notification.object as! GCController
         for player in players {
             if let player = player {
@@ -705,25 +706,25 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    func assignUnknownController(controller: GCController) {
+    func assignUnknownController(_ controller: GCController) {
         // Specifically declare `player` as mutable so that we can reassign it while processing.
-        for (index, var player) in players.enumerate() {
+        for (index, var player) in players.enumerated() {
             if player == nil {
                 player = Player()
                 players[index] = player
             }
 
-            if player.controller != nil {
+            if player?.controller != nil {
                 continue
             }
 
-            controller.playerIndex = GCControllerPlayerIndex(rawValue: index) ?? .IndexUnset
-            configureController(controller, forPlayer: player)
+            controller.playerIndex = GCControllerPlayerIndex(rawValue: index) ?? .indexUnset
+            configureController(controller, forPlayer: player!)
             return
         }
     }
 
-    func assignPresetController(controller: GCController, toIndex index: GCControllerPlayerIndex) {
+    func assignPresetController(_ controller: GCController, toIndex index: GCControllerPlayerIndex) {
         var player = players[index.rawValue]
         if player == nil {
             player = Player()
@@ -735,10 +736,10 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
             return
         }
 
-        configureController(controller, forPlayer: player)
+        configureController(controller, forPlayer: player!)
     }
 
-    func configureController(controller: GCController, forPlayer player: Player) {
+    func configureController(_ controller: GCController, forPlayer player: Player) {
         player.controller = controller
 
         let directionPadMoveHandler: GCControllerDirectionPadValueChangedHandler = { dpad, x, y in

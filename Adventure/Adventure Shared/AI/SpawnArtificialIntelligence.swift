@@ -17,7 +17,7 @@ class SpawnArtificialIntelligence: ArtificialIntelligence {
     
     // MARK: Scene Processing Support
 
-    override func updateWithTimeSinceLastUpdate(timeInterval: NSTimeInterval) {
+    override func updateWithTimeSinceLastUpdate(_ timeInterval: TimeInterval) {
         // If the cave is destroyed, no need to do anything!
         if cave.health <= 0.0 {
             return
@@ -38,7 +38,7 @@ class SpawnArtificialIntelligence: ArtificialIntelligence {
     
     /// Determines whether or not goblins should be generated based on the current state
     /// of the cave, its goblins, and the hero.
-    func shouldGenerateGoblin(inout timeUntilNextGenerate: CGFloat) -> Bool {
+    func shouldGenerateGoblin(_ timeUntilNextGenerate: inout CGFloat) -> Bool {
         // If there are no active goblins, create one!
         if cave.activeGoblins.isEmpty {
             timeUntilNextGenerate = 4.0
@@ -62,17 +62,17 @@ class SpawnArtificialIntelligence: ArtificialIntelligence {
         return cave.timeUntilNextGenerate <= 0 && cave.activeGoblins.count < 5
     }
     
-    func shouldGenerateGoblinBasedOnCaveDistanceToHero(inout timeUntilNextGenerate: CGFloat) -> Bool {
+    func shouldGenerateGoblinBasedOnCaveDistanceToHero(_ timeUntilNextGenerate: inout CGFloat) -> Bool {
         let scene = cave.characterScene
         
         // Maximum hero distance
         var nearestHeroDistance = CGFloat(AdventureScene.Constants.worldSize)
         var nearestHeroPosition: CGPoint?
         
-        let cavePosition = scene.convertPoint(cave.position, fromNode: cave.parent!)
+        let cavePosition = scene.convert(cave.position, from: cave.parent!)
         
         for hero in scene.heroes {
-            let heroPosition = scene.convertPoint(hero.position, fromNode: hero.parent!)
+            let heroPosition = scene.convert(hero.position, from: hero.parent!)
             let distance = cavePosition.distanceToPoint(heroPosition)
             
             if distance < nearestHeroDistance {

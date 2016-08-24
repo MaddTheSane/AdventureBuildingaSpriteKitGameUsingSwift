@@ -27,7 +27,7 @@ final class Archer: HeroCharacter, SharedAssetProvider {
         getHitAnimationFrames = loadFramesFromAtlasWithName("Archer_GetHit")
         deathAnimationFrames = loadFramesFromAtlasWithName("Archer_Death")
         
-        let archerProjectile = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 2.0, height: 24.0))
+        let archerProjectile = SKSpriteNode(color: SKColor.white, size: CGSize(width: 2.0, height: 24.0))
         archerProjectile.name = "Projectile"
         
         // Assign the physics body; unwrap the physics body to configure it.
@@ -41,9 +41,9 @@ final class Archer: HeroCharacter, SharedAssetProvider {
         projectileEmitter = SKEmitterNode(fileNamed: "ArcherProjectile")!
 
         let actions = [
-            SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 10.0, duration: 0.0),
-            SKAction.waitForDuration(0.75),
-            SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.25)
+            SKAction.colorize(with: SKColor.white, colorBlendFactor: 10.0, duration: 0.0),
+            SKAction.wait(forDuration: 0.75),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.25)
         ]
 
         damageAction = SKAction.sequence(actions)

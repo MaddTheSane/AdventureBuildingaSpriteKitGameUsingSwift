@@ -27,14 +27,14 @@ class EnemyCharacter: Character {
     
     // MARK: Scene Processing Support
 
-    override func updateWithTimeSinceLastUpdate(interval: NSTimeInterval) {
+    override func updateWithTimeSinceLastUpdate(_ interval: TimeInterval) {
         super.updateWithTimeSinceLastUpdate(interval)
 
         intelligence.updateWithTimeSinceLastUpdate(interval)
     }
 
-    override func animationDidComplete(animationState: AnimationState) {
-        if animationState == AnimationState.Attack {
+    override func animationDidComplete(_ animationState: AnimationState) {
+        if animationState == AnimationState.attack {
             intelligence.target?.collidedWith(physicsBody!)
         }
     }

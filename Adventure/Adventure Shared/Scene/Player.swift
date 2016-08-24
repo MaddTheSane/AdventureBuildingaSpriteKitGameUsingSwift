@@ -13,7 +13,7 @@ class Player: NSObject {
     // MARK: Types
     
     enum HeroType {
-        case Warrior, Archer
+        case warrior, archer
     }
     
     struct Constants {
@@ -55,10 +55,10 @@ class Player: NSObject {
     override init() {
         // Pick one of the two hero classes at random for additional players in multiplayer games.
         if arc4random_uniform(2) == 0 {
-            heroType = .Warrior
+            heroType = .warrior
         }
         else {
-            heroType = .Archer
+            heroType = .archer
         }
     }
 }

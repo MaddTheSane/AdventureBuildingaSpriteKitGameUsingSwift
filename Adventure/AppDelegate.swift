@@ -30,10 +30,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     @IBOutlet weak var warriorButton: NSButton!
     
     var adventureWindow: NSWindow {
-        let windows = NSApplication.sharedApplication().windows 
+        let windows = NSApplication.shared().windows 
         
         for window in windows {
-            if window.isKindOfClass(AdventureWindow.self) {
+            if window.isKind(of: AdventureWindow.self) {
                 return window
             }
         }
@@ -43,7 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     // MARK: Application Life Cycle
 
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         loadingProgressIndicator.startAnimation(self)
 
         AdventureScene.loadSceneAssetsWithCompletionHandler { loadedScene in
@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             adventureWindow.delegate = self
             self.scene = loadedScene
             
-            let windowRect = adventureWindow.contentRectForFrameRect(adventureWindow.frame)
+            let windowRect = adventureWindow.contentRect(forFrameRect: adventureWindow.frame)
             self.scene.size = windowRect.size
             
             self.scene.finishedMovingToView = {
@@ -61,7 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
                 
                 // Stop the loading indicator once the scene is completely loaded.
                 self.loadingProgressIndicator.stopAnimation(self)
-                self.loadingProgressIndicator.hidden = true
+                self.loadingProgressIndicator.isHidden = true
                 
                 // Show the character selection buttons so the user can start playing.
                 self.archerButton.alphaValue = 1.0
@@ -80,34 +80,34 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     
     // MARK: NSWindowDelegate
     
-    func windowWillResize(sender: NSWindow, toSize frameSize: NSSize) -> NSSize {
-        scene.paused = true
+    func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
+        scene.isPaused = true
         return frameSize
     }
     
-    func windowDidResize(notification: NSNotification) {
+    func windowDidResize(_ notification: Notification) {
         let window = notification.object as! NSWindow
-        let windowSize = window.contentRectForFrameRect(window.frame)
+        let windowSize = window.contentRect(forFrameRect: window.frame)
         
         scene.size = CGSize(width: windowSize.width, height: windowSize.height)
         view.frame.size = CGSize(width: windowSize.width, height: windowSize.height)
         
-        scene.paused = false
+        scene.isPaused = false
     }
     
     // MARK: IBActions
 
     @IBAction func chooseArcher(_: AnyObject) {
-        scene.startLevel(.Archer)
-        gameLogo.hidden = true
+        scene.startLevel(.archer)
+        gameLogo.isHidden = true
 
         archerButton.alphaValue = 0.0
         warriorButton.alphaValue = 0.0
     }
 
     @IBAction func chooseWarrior(_: AnyObject) {
-        scene.startLevel(.Warrior)
-        gameLogo.hidden = true
+        scene.startLevel(.warrior)
+        gameLogo.isHidden = true
 
         archerButton.alphaValue = 0.0
         warriorButton.alphaValue = 0.0

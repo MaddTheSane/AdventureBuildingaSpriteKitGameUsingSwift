@@ -23,15 +23,15 @@ final class Tree: ParallaxSprite, SharedAssetProvider {
 
     // MARK: NSCopying
     
-    override func copyWithZone(zone: NSZone) -> AnyObject {
-        let tree = super.copyWithZone(zone) as! Tree
+    override func copy(with zone: NSZone?) -> Any {
+        let tree = super.copy(with: zone) as! Tree
         tree.fadeAlpha = fadeAlpha
         return tree
     }
 
     // MARK: Scene Processing Support
 
-    func updateAlphaWithScene(scene: AdventureScene) {
+    func updateAlphaWithScene(_ scene: AdventureScene) {
         if !fadeAlpha {
             return
         }
@@ -41,9 +41,9 @@ final class Tree: ParallaxSprite, SharedAssetProvider {
             Therefore, iterate through all of the heroes and base the distance for adjusting the tree's alpha
             on the player closest to the tree.
         */
-        let currentPosition = self.scene!.convertPoint(position, fromNode: parent!)
-        let distance = scene.heroes.reduce(CGFloat.max) { minimumDistance, hero in
-            let heroPosition = hero.scene!.convertPoint(hero.position, fromNode: hero.parent!)
+        let currentPosition = self.scene!.convert(position, from: parent!)
+        let distance = scene.heroes.reduce(CGFloat.greatestFiniteMagnitude) { minimumDistance, hero in
+            let heroPosition = hero.scene!.convert(hero.position, from: hero.parent!)
             let distanceToHero = currentPosition.distanceToPoint(heroPosition)
             if distanceToHero < minimumDistance {
                 return distanceToHero
@@ -55,7 +55,7 @@ final class Tree: ParallaxSprite, SharedAssetProvider {
         alpha = alphaForDistance(distance)
     }
 
-    func alphaForDistance(distance: CGFloat) -> CGFloat {
+    func alphaForDistance(_ distance: CGFloat) -> CGFloat {
         let opaqueDistance: CGFloat = 400.0
 
         if distance > opaqueDistance {

@@ -31,7 +31,7 @@ class ChaseArtificialIntelligence: ArtificialIntelligence {
     
     // MARK: Scene Processing Support
 
-    override func updateWithTimeSinceLastUpdate(timeInterval: NSTimeInterval) {
+    override func updateWithTimeSinceLastUpdate(_ timeInterval: TimeInterval) {
         // The goal of the implementation of this method is to find the closest hero within the
         // enemy alert radius. After finding the closest hero, chase it!
         
@@ -55,14 +55,14 @@ class ChaseArtificialIntelligence: ArtificialIntelligence {
     // MARK: Intelligence Implementation
     
     func closestHeroWithinEnemyAlertRadius() -> (closestHeroDistance: CGFloat, closestHero: HeroCharacter)? {
-        let position = character.scene!.convertPoint(character.position, fromNode: character.parent!)
+        let position = character.scene!.convert(character.position, from: character.parent!)
 
         // Start off with the maximum distance possible away from any of the heroes.
-        var closestHeroDistance = CGFloat.max
+        var closestHeroDistance = CGFloat.greatestFiniteMagnitude
         var closestHero: HeroCharacter?
         
         for hero in character.characterScene.heroes {
-            let heroPosition = hero.scene!.convertPoint(hero.position, fromNode: hero.parent!)
+            let heroPosition = hero.scene!.convert(hero.position, from: hero.parent!)
             let distance = position.distanceToPoint(heroPosition)
             
             if distance < enemyAlertRadius && distance < closestHeroDistance && !hero.isDying {
@@ -84,13 +84,13 @@ class ChaseArtificialIntelligence: ArtificialIntelligence {
         return nil
     }
     
-    func chaseTargetWithinDistance(closestHeroDistance: CGFloat, timeInterval: NSTimeInterval) {
+    func chaseTargetWithinDistance(_ closestHeroDistance: CGFloat, timeInterval: TimeInterval) {
         if let heroPosition = target?.position {
             if closestHeroDistance > attackRadius {
-                character.moveTowardsPosition(heroPosition, withTimeInterval: timeInterval)
+                character.move(towards: heroPosition, timeInterval: timeInterval)
             }
             else {
-                character.faceToPosition(heroPosition)
+                character.face(position: heroPosition)
                 character.performAttackAction()
             }
         }

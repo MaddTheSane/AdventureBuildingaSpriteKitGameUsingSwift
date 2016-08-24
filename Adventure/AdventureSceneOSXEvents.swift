@@ -12,24 +12,24 @@ extension AdventureScene {
     // MARK: Types
     
     /// Represents different types of user input that result in actions.
-    private enum KeyEventFlag {
-        case MoveForward
-        case MoveLeft
-        case MoveRight
-        case MoveBackward
-        case Fire
+    fileprivate enum KeyEventFlag {
+        case moveForward
+        case moveLeft
+        case moveRight
+        case moveBackward
+        case fire
 
         /// The mapping from key events to their player actions.
-        private static let keyMapping: [UnicodeScalar: KeyEventFlag] = [
-            "w":                    .MoveForward,
-            UnicodeScalar(0xF700):  .MoveForward,
-            "s":                    .MoveBackward,
-            UnicodeScalar(0xF701):  .MoveBackward,
-            "d":                    .MoveRight,
-            UnicodeScalar(0xF703):  .MoveRight,
-            "a":                    .MoveLeft,
-            UnicodeScalar(0xF702):  .MoveLeft,
-            " ":                    .Fire
+        fileprivate static let keyMapping: [UnicodeScalar: KeyEventFlag] = [
+            "w":                    .moveForward,
+            UnicodeScalar(0xF700)!:  .moveForward,
+            "s":                    .moveBackward,
+            UnicodeScalar(0xF701)!:  .moveBackward,
+            "d":                    .moveRight,
+            UnicodeScalar(0xF703)!:  .moveRight,
+            "a":                    .moveLeft,
+            UnicodeScalar(0xF702)!:  .moveLeft,
+            " ":                    .fire
         ]
         
         // MARK: Initializers
@@ -46,18 +46,18 @@ extension AdventureScene {
     
     // MARK: Event Handling
     
-    override func keyDown(event: NSEvent) {
+    override func keyDown(with event: NSEvent) {
         handleKeyEvent(event, keyDown: true)
     }
     
-    override func keyUp(event: NSEvent) {
+    override func keyUp(with event: NSEvent) {
         handleKeyEvent(event, keyDown: false)
     }
     
     // MARK: Convenience
     
-    private func handleKeyEvent(event: NSEvent, keyDown: Bool) {
-        if event.modifierFlags.contains(.NumericPadKeyMask) {
+    fileprivate func handleKeyEvent(_ event: NSEvent, keyDown: Bool) {
+        if event.modifierFlags.contains(.numericPad) {
             if let charactersIgnoringModifiers = event.charactersIgnoringModifiers {
                 applyEventsFromEventString(charactersIgnoringModifiers, keyDown: keyDown)
             }
@@ -68,15 +68,15 @@ extension AdventureScene {
         }
     }
     
-    func applyEventsFromEventString(eventString: String, keyDown: Bool) {
+    func applyEventsFromEventString(_ eventString: String, keyDown: Bool) {
         for key in eventString.unicodeScalars {
             if let flag = KeyEventFlag(unicodeScalar: key) {
                 switch flag {
-                    case .MoveForward: defaultPlayer.moveForward = keyDown
-                    case .MoveBackward: defaultPlayer.moveBackward = keyDown
-                    case .MoveLeft: defaultPlayer.moveLeft = keyDown
-                    case .MoveRight: defaultPlayer.moveRight = keyDown
-                    case .Fire: defaultPlayer.fireAction = keyDown
+                    case .moveForward: defaultPlayer.moveForward = keyDown
+                    case .moveBackward: defaultPlayer.moveBackward = keyDown
+                    case .moveLeft: defaultPlayer.moveLeft = keyDown
+                    case .moveRight: defaultPlayer.moveRight = keyDown
+                    case .fire: defaultPlayer.fireAction = keyDown
                 }
             }
         }

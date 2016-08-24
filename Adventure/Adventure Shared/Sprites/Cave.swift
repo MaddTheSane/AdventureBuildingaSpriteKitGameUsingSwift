@@ -35,8 +35,8 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
     
     // MARK: NSCopying
     
-    override func copyWithZone(zone: NSZone) -> AnyObject {
-        let cave = super.copyWithZone(zone) as! Cave
+    override func copy(with zone: NSZone?) -> Any {
+        let cave = super.copy(with: zone) as! Cave
         cave.smokeEmitter = smokeEmitter?.copy() as? SKEmitterNode
         cave.timeUntilNextGenerate = timeUntilNextGenerate
         cave.activeGoblins = [Goblin]()
@@ -51,7 +51,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
     override func configurePhysicsBody() {
         // Assign the physics body; unwrap the physics body to configure it.
         physicsBody = SKPhysicsBody(circleOfRadius: collisionRadius)
-        physicsBody!.dynamic = false
+        physicsBody!.isDynamic = false
         physicsBody!.categoryBitMask = ColliderType.Cave.rawValue
         physicsBody!.collisionBitMask = ColliderType.all.rawValue
         physicsBody!.contactTestBitMask = ColliderType.Projectile.rawValue
@@ -62,7 +62,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
 
     // MARK: Scene Processing Support
     
-    override func updateWithTimeSinceLastUpdate(interval: NSTimeInterval) {
+    override func updateWithTimeSinceLastUpdate(_ interval: TimeInterval) {
         super.updateWithTimeSinceLastUpdate(interval) // this triggers the update in the SpawnAI
 
         for goblin in activeGoblins {
@@ -70,7 +70,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         }
     }
     
-    override func collidedWith(other: SKPhysicsBody) {
+    override func collidedWith(_ other: SKPhysicsBody) {
         if health > 0.0 {
             if (other.categoryBitMask & ColliderType.Projectile.rawValue) == ColliderType.Projectile.rawValue {
                 let damage = 10.0
@@ -79,7 +79,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         }
     }
     
-    func applyCaveDamage(damage: Double, projectile: SKNode) {
+    func applyCaveDamage(_ damage: Double, projectile: SKNode) {
         let killed = super.applyDamage(damage)
         if killed {
             // give the player some points
@@ -90,7 +90,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         
         // show damage on parallax stacks
         for node in children {
-            node.runAction(self.dynamicType.damageAction)
+            node.run(type(of: self).damageAction)
         }
     }
     
@@ -103,7 +103,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         emitter.position = position
         emitter.zPosition = -0.8
         smokeEmitter = emitter
-        characterScene.addNode(emitter, atWorldLayer: .AboveCharacter)
+        characterScene.addNode(emitter, atWorldLayer: .aboveCharacter)
     }
     
     override func performDeath() {
@@ -114,27 +114,27 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         splort.zRotation = virtualZRotation
         splort.position = position
         splort.alpha = 0.1
-        splort.runAction(SKAction.fadeAlphaTo(1.0, duration: 0.5))
+        splort.run(SKAction.fadeAlpha(to: 1.0, duration: 0.5))
         
-        characterScene.addNode(splort, atWorldLayer: .BelowCharacter)
+        characterScene.addNode(splort, atWorldLayer: .belowCharacter)
         
-        runAction(SKAction.sequence([
-            SKAction.fadeAlphaTo(0.0, duration: 0.5),
+        run(SKAction.sequence([
+            SKAction.fadeAlpha(to: 0.0, duration: 0.5),
             SKAction.removeFromParent()
         ]))
         
         if let smoke = smokeEmitter {
-            smoke.runAction(SKAction.sequence([
-                SKAction.waitForDuration(2.0),
-                SKAction.runBlock {
+            smoke.run(SKAction.sequence([
+                SKAction.wait(forDuration: 2.0),
+                SKAction.run {
                     smoke.particleBirthRate = 2.0
                 },
-                SKAction.waitForDuration(2.0),
-                SKAction.runBlock {
+                SKAction.wait(forDuration: 2.0),
+                SKAction.run {
                     smoke.particleBirthRate = 0.0
                 },
-                SKAction.waitForDuration(10.0),
-                SKAction.fadeAlphaTo(0.0, duration: 0.5),
+                SKAction.wait(forDuration: 10.0),
+                SKAction.fadeAlpha(to: 0.0, duration: 0.5),
                 SKAction.removeFromParent()
                 ]))
         }
@@ -148,7 +148,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
 
     // MARK: Goblin Targeting
     
-    func stopGoblinsFromTargettingHero(target: Character) {
+    func stopGoblinsFromTargettingHero(_ target: Character) {
         for goblin in activeGoblins {
             goblin.intelligence.target = nil
         }
@@ -168,7 +168,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
             let rot = adjustAssetOrientation(virtualZRotation)
             goblin.position = position + CGPoint(x: cos(rot)*offset, y: sin(rot)*offset)
 
-            goblin.addToScene(characterScene)
+            goblin.add(to: characterScene)
 
             goblin.zPosition = -1.0
 
@@ -180,10 +180,10 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         }
     }
 
-    func recycle(goblin: Goblin) {
+    func recycle(_ goblin: Goblin) {
         goblin.reset()
-        if let index = activeGoblins.indexOf(goblin) {
-            activeGoblins.removeAtIndex(index)
+        if let index = activeGoblins.index(of: goblin) {
+            activeGoblins.remove(at: index)
         }
         inactiveGoblins.append(goblin)
         Shared.goblinAllocation -= 1
@@ -219,16 +219,16 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         deathSplort = SKSpriteNode(texture: atlas.textureNamed("cave_destroyed"))
         
         damageAction = SKAction.sequence([
-            SKAction.colorizeWithColor(SKColor.redColor(), colorBlendFactor: 1.0, duration: 0.0),
-            SKAction.waitForDuration(0.25),
-            SKAction.colorizeWithColorBlendFactor(0.0, duration:0.1)
+            SKAction.colorize(with: SKColor.red, colorBlendFactor: 1.0, duration: 0.0),
+            SKAction.wait(forDuration: 0.25),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration:0.1)
         ])
         
         let sprites = [
             caveBase,
             caveTop
         ]
-        Shared.template = Cave(sprites: sprites, atPosition: CGPointZero, usingOffset: 50.0)
+        Shared.template = Cave(sprites: sprites, atPosition: CGPoint.zero, usingOffset: 50.0)
         Shared.template.movementSpeed = 0.0
         Shared.template.name = "goblinCave"
     }

@@ -50,28 +50,28 @@ final class Boss: EnemyCharacter, SharedAssetProvider {
     
     // MARK: Scene Processing Support
     
-    override func animationDidComplete(animationState: AnimationState) {
+    override func animationDidComplete(_ animationState: AnimationState) {
         super.animationDidComplete(animationState)
         
-        if animationState == AnimationState.Death {
+        if animationState == AnimationState.death {
             removeAllActions()
             let actions = [
-                SKAction.waitForDuration(3.0),
-                SKAction.fadeOutWithDuration(2.0),
+                SKAction.wait(forDuration: 3.0),
+                SKAction.fadeOut(withDuration: 2.0),
                 SKAction.removeFromParent()
             ]
             
-            runAction(SKAction.sequence(actions))
+            run(SKAction.sequence(actions))
         }
     }
     
-    override func collidedWith(otherBody: SKPhysicsBody) {
+    override func collidedWith(_ otherBody: SKPhysicsBody) {
         if isDying {
             return
         }
         
         if (otherBody.categoryBitMask & ColliderType.Projectile.rawValue) == ColliderType.Projectile.rawValue {
-            requestedAnimation = AnimationState.GetHit
+            requestedAnimation = AnimationState.getHit
             let damage = 2.0
             let killed = applyDamage(damage, projectile: otherBody.node)
             
@@ -97,9 +97,9 @@ final class Boss: EnemyCharacter, SharedAssetProvider {
         damageEmitter = SKEmitterNode(fileNamed: "BossDamage")!
         
         let actions = [
-            SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 1.0, duration: 0.0),
-            SKAction.waitForDuration(0.5),
-            SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.1)
+            SKAction.colorize(with: SKColor.white, colorBlendFactor: 1.0, duration: 0.0),
+            SKAction.wait(forDuration: 0.5),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.1)
         ]
         
         damageAction = SKAction.sequence(actions)

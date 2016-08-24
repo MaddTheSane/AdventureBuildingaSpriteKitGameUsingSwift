@@ -48,34 +48,34 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
 
     // MARK: Scene Processing Support
     
-    override func animationDidComplete(animationState: AnimationState) {
+    override func animationDidComplete(_ animationState: AnimationState) {
         super.animationDidComplete(animationState)
 
-        if animationState == AnimationState.Death {
+        if animationState == AnimationState.death {
             removeAllActions()
 
             let actions = [
-                SKAction.waitForDuration(0.75),
-                SKAction.fadeOutWithDuration(1.0),
-                SKAction.runBlock {
+                SKAction.wait(forDuration: 0.75),
+                SKAction.fadeOut(withDuration: 1.0),
+                SKAction.run {
                     self.removeFromParent()
                     self.cave?.recycle(self)
                 }
             ]
 
             let actionSequence = SKAction.sequence(actions)
-            runAction(actionSequence)
+            run(actionSequence)
         }
     }
 
-    override func collidedWith(otherBody: SKPhysicsBody) {
+    override func collidedWith(_ otherBody: SKPhysicsBody) {
         if isDying  {
             return
         }
 
         if otherBody.categoryBitMask & ColliderType.Projectile.rawValue == ColliderType.Projectile.rawValue {
             // Apply random damage of either 100% or 50%
-            requestedAnimation = .GetHit
+            requestedAnimation = .getHit
             var damage = 100.0
             if arc4random_uniform(2) == 0 {
                 damage = 50.0
@@ -96,8 +96,8 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
         splort.zRotation = unitRandom() * CGFloat(M_PI)
         splort.position = position
         splort.alpha = 0.5
-        characterScene.addNode(splort, atWorldLayer: .Ground)
-        splort.runAction(SKAction.fadeOutWithDuration(10.0))
+        characterScene.addNode(splort, atWorldLayer: .ground)
+        splort.run(SKAction.fadeOut(withDuration: 10.0))
 
         super.performDeath()
 
@@ -129,9 +129,9 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
         deathSplort = SKSpriteNode(texture: atlas.textureNamed("minionSplort"))
 
         let actions = [
-            SKAction.colorizeWithColor(SKColor.whiteColor(), colorBlendFactor: 1.0, duration: 0.0),
-            SKAction.waitForDuration(0.75),
-            SKAction.colorizeWithColorBlendFactor(0.0, duration: 0.1)
+            SKAction.colorize(with: SKColor.white, colorBlendFactor: 1.0, duration: 0.0),
+            SKAction.wait(forDuration: 0.75),
+            SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.1)
         ]
 
         damageAction = SKAction.sequence(actions)

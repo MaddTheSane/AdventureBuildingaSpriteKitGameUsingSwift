@@ -26,7 +26,7 @@ class ArtificialIntelligence {
     // MARK: Scene Processing Support
 
     /// This should be overriden in subclasses.
-    func updateWithTimeSinceLastUpdate(interval: NSTimeInterval) {
+    func updateWithTimeSinceLastUpdate(_ interval: TimeInterval) {
        // No implementation required in the base class AI.
     }
 }

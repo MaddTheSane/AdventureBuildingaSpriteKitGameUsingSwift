@@ -9,16 +9,16 @@
 import SpriteKit
 
 enum AnimationState: UInt32 {
-    case Idle = 0, Walk, Attack, GetHit, Death
+    case idle = 0, walk, attack, getHit, death
 }
 
 enum MoveDirection {
-    case Forward, Left, Right, Back
+    case forward, left, right, back
 }
 
-struct ColliderType : OptionSetType {
+struct ColliderType : OptionSet {
 	let rawValue: UInt32
-	private init(_ value: UInt32) { self.init(rawValue: value) }
+	fileprivate init(_ value: UInt32) { self.init(rawValue: value) }
 	init(rawValue value: UInt32) { self.rawValue = value }
 	
 	static let Hero = ColliderType(1 << 0)
@@ -41,7 +41,7 @@ class Character: ParallaxSprite {
     var animationSpeed: CGFloat = 1.0/28.0
     var movementSpeed: CGFloat = 200.0
     var rotationSpeed: CGFloat = 0.06
-    var requestedAnimation = AnimationState.Idle
+    var requestedAnimation = AnimationState.idle
     var shadowBlob = SKSpriteNode()
     
     var collisionRadius: CGFloat {
@@ -176,12 +176,12 @@ class Character: ParallaxSprite {
 
     convenience init(texture: SKTexture?, atPosition position: CGPoint) {
         let size = texture != nil ? texture!.size() : CGSize(width: 0, height: 0)
-        self.init(texture: texture, color: SKColor.whiteColor(), size: size)
+        self.init(texture: texture, color: SKColor.white, size: size)
 
         sharedInitAtPosition(position)
     }
 
-    func sharedInitAtPosition(position: CGPoint) {
+    func sharedInitAtPosition(_ position: CGPoint) {
         let atlas = SKTextureAtlas(named: "Environment")
 
         shadowBlob = SKSpriteNode(texture: atlas.textureNamed("blobShadow"))
@@ -194,8 +194,8 @@ class Character: ParallaxSprite {
     
     // MARK: NSCopying
     
-    override func copyWithZone(zone: NSZone) -> AnyObject {
-        let character = super.copyWithZone(zone) as! Character
+    override func copy(with zone: NSZone?) -> Any {
+        let character = super.copy(with: zone) as! Character
         character.isDying = isDying
         character.isAttacking = isAttacking
         character.health = health
@@ -212,14 +212,14 @@ class Character: ParallaxSprite {
     
     func configurePhysicsBody() {}
     
-    override func setScale(scale: CGFloat) {
+    override func setScale(_ scale: CGFloat) {
         super.setScale(scale)
         shadowBlob.setScale(scale)
     }
     
     // MARK: Scene Processing Support
 
-    func updateWithTimeSinceLastUpdate(interval: NSTimeInterval) {
+    func updateWithTimeSinceLastUpdate(_ interval: TimeInterval) {
         shadowBlob.position = position
         
         if !animated {
@@ -228,11 +228,12 @@ class Character: ParallaxSprite {
         resolveRequestedAnimation()
     }
 
-    func animationDidComplete(animation: AnimationState) {}
+    func animationDidComplete(_ animation: AnimationState) {}
     
-    func collidedWith(other: SKPhysicsBody) {}
+    func collidedWith(_ other: SKPhysicsBody) {}
     
-    func applyDamage( damage1: Double, projectile: SKNode? = nil) -> Bool {
+    @discardableResult
+    func applyDamage( _ damage1: Double, projectile: SKNode? = nil) -> Bool {
         var damage = damage1
         if let proj = projectile {
             damage *= Double(proj.alpha)
@@ -241,13 +242,13 @@ class Character: ParallaxSprite {
         health -= damage
         
         if health > 0.0 {
-            let emitter = self.dynamicType.damageEmitter.copy() as! SKEmitterNode
-            characterScene.addNode(emitter, atWorldLayer: .AboveCharacter)
+            let emitter = type(of: self).damageEmitter.copy() as! SKEmitterNode
+            characterScene.addNode(emitter, atWorldLayer: .aboveCharacter)
             
             emitter.position = position
             runOneShotEmitter(emitter, withDuration: 0.15)
             
-            runAction(self.dynamicType.damageAction)
+            run(type(of: self).damageAction)
             return false
         }
         
@@ -261,13 +262,13 @@ class Character: ParallaxSprite {
         }
         
         isAttacking = true
-        requestedAnimation = .Attack
+        requestedAnimation = .attack
     }
     
     func performDeath() {
         health = 0.0
         isDying = true
-        requestedAnimation = .Death
+        requestedAnimation = .death
     }
     
     func reset() {
@@ -275,7 +276,7 @@ class Character: ParallaxSprite {
         isDying = false
         isAttacking = false
         animated = true
-        requestedAnimation = .Idle
+        requestedAnimation = .idle
         shadowBlob.alpha = 1.0
     }
 
@@ -286,47 +287,47 @@ class Character: ParallaxSprite {
 
         fireAnimationForState(requestedAnimation, usingTextures: frames, withKey: key)
 
-        requestedAnimation = isDying ? .Death : .Idle
+        requestedAnimation = isDying ? .death : .idle
     }
 
-    func animationFramesAndKeyForState(state: AnimationState) -> ([SKTexture], String) {
+    func animationFramesAndKeyForState(_ state: AnimationState) -> ([SKTexture], String) {
         switch state {
-            case .Walk:
-               return (self.dynamicType.walkAnimationFrames, "anim_walk")
+            case .walk:
+               return (type(of: self).walkAnimationFrames, "anim_walk")
 
-            case .Attack:
-                return (self.dynamicType.attackAnimationFrames, "anim_attack")
+            case .attack:
+                return (type(of: self).attackAnimationFrames, "anim_attack")
 
-            case .GetHit:
-                return (self.dynamicType.getHitAnimationFrames, "anim_gethit")
+            case .getHit:
+                return (type(of: self).getHitAnimationFrames, "anim_gethit")
 
-            case .Death:
-                return (self.dynamicType.deathAnimationFrames, "anim_death")
+            case .death:
+                return (type(of: self).deathAnimationFrames, "anim_death")
 
-            case .Idle:
-                return (self.dynamicType.idleAnimationFrames, "anim_idle")
+            case .idle:
+                return (type(of: self).idleAnimationFrames, "anim_idle")
         }
     }
 
-    func fireAnimationForState(animationState: AnimationState, usingTextures frames: [SKTexture], withKey key: String) {
-        let animAction = actionForKey(key)
+    func fireAnimationForState(_ animationState: AnimationState, usingTextures frames: [SKTexture], withKey key: String) {
+        let animAction = action(forKey: key)
 
         if animAction != nil || frames.count < 1 {
             return
         }
 
-        let animationAction = SKAction.animateWithTextures(frames, timePerFrame: NSTimeInterval(animationSpeed), resize: true, restore: false)
-        let blockAction = SKAction.runBlock {
+        let animationAction = SKAction.animate(with: frames, timePerFrame: TimeInterval(animationSpeed), resize: true, restore: false)
+        let blockAction = SKAction.run {
             self.animationHasCompleted(animationState)
         }
 
-        runAction(SKAction.sequence([animationAction, blockAction]), withKey: key)
+        run(SKAction.sequence([animationAction, blockAction]), withKey: key)
     }
 
-    func animationHasCompleted(animationState: AnimationState) {
+    func animationHasCompleted(_ animationState: AnimationState) {
         if isDying {
             animated = false
-            shadowBlob.runAction(SKAction.fadeOutWithDuration(1.5))
+            shadowBlob.run(SKAction.fadeOut(withDuration: 1.5))
         }
 
         animationDidComplete(animationState)
@@ -336,86 +337,108 @@ class Character: ParallaxSprite {
         }
     }
 
-    func fadeIn(duration: NSTimeInterval) {
-        let fadeAction = SKAction.fadeInWithDuration(duration)
+    func fadeIn(_ duration: TimeInterval) {
+        let fadeAction = SKAction.fadeIn(withDuration: duration)
 
         alpha = 0.0
-        runAction(fadeAction)
+        run(fadeAction)
 
         shadowBlob.alpha = 0.0
-        shadowBlob.runAction(fadeAction)
+        shadowBlob.run(fadeAction)
     }
     
     // MARK: Movement Handling
     
-    func moveInMoveDirection(direction: MoveDirection, withTimeInterval timeInterval: NSTimeInterval) {
+    func moveIn(direction: MoveDirection, timeInterval: TimeInterval) {
         var action: SKAction!
         
         switch direction {
-        case .Forward:
+        case .forward:
             let x = -sin(zRotation) * movementSpeed * CGFloat(timeInterval)
             let y =  cos(zRotation) * movementSpeed * CGFloat(timeInterval)
-            action = SKAction.moveByX(x, y: y, duration: timeInterval)
+            action = SKAction.moveBy(x: x, y: y, duration: timeInterval)
             
-        case .Back:
+        case .back:
             let x =  sin(zRotation) * movementSpeed * CGFloat(timeInterval)
             let y = -cos(zRotation) * movementSpeed * CGFloat(timeInterval)
-            action = SKAction.moveByX(x, y: y, duration: timeInterval)
+            action = SKAction.moveBy(x: x, y: y, duration: timeInterval)
             
-        case .Left:
-            action = SKAction.rotateByAngle(rotationSpeed, duration:timeInterval)
+        case .left:
+            action = SKAction.rotate(byAngle: rotationSpeed, duration:timeInterval)
             
-        case .Right:
-            action = SKAction.rotateByAngle(-rotationSpeed, duration:timeInterval)
+        case .right:
+            action = SKAction.rotate(byAngle: -rotationSpeed, duration:timeInterval)
         }
         
         if action != nil {
-            requestedAnimation = .Walk
-            runAction(action)
+            requestedAnimation = .walk
+            run(action)
         }
     }
     
-    func faceToPosition(position: CGPoint) -> CGFloat {
+    @available(*, unavailable, renamed:"moveIn(direction:timeInterval:)")
+    func moveInMoveDirection(_ direction: MoveDirection, withTimeInterval timeInterval: TimeInterval) {
+
+    }
+    
+    @available(*, unavailable, renamed:"move(towards:timeInterval:)")
+    func moveTowardsPosition(_ targetPosition: CGPoint, withTimeInterval timeInterval: TimeInterval) {
+    }
+    
+    @available(*, unavailable, renamed:"face(position:)")
+    func faceToPosition(_ position: CGPoint) -> CGFloat {
+    return 0
+    }
+    @available(*, unavailable, renamed:"moveFrom(currentPosition:byDeltaX:deltaY:maximumDistance:facing:)")
+    func moveFromCurrentPosition(_ currentPosition: CGPoint, byDeltaX dx: CGFloat, deltaY dy: CGFloat, maximumDistance: CGFloat, facing: CGPoint? = nil) {
+    }
+    
+    @available(*, unavailable, renamed:"add(to:)")
+    func addToScene(_ scene: AdventureScene) {
+    }
+    
+    @discardableResult
+    func face(position: CGPoint) -> CGFloat {
         let angle = adjustAssetOrientation(position.radiansToPoint(self.position))
         
-        let action = SKAction.rotateToAngle(angle, duration: 0)
+        let action = SKAction.rotate(toAngle: angle, duration: 0)
         
-        runAction(action)
+        run(action)
 
         return angle
     }
     
-    func moveTowardsPosition(targetPosition: CGPoint, withTimeInterval timeInterval: NSTimeInterval) {
+    func move(towards targetPosition: CGPoint, timeInterval: TimeInterval) {
         // Grab an immutable position in case Sprite Kit changes it underneath us.
         let currentPosition = position
         let deltaX = targetPosition.x - currentPosition.x
         let deltaY = targetPosition.y - currentPosition.y
         let maximumDistance = movementSpeed * CGFloat(timeInterval)
         
-        moveFromCurrentPosition(currentPosition, byDeltaX: deltaX, deltaY: deltaY, maximumDistance: maximumDistance)
+        moveFrom(currentPosition: currentPosition, byDeltaX: deltaX, deltaY: deltaY, maximumDistance: maximumDistance)
     }
     
-    func moveInDirection(direction: CGVector, withTimeInterval timeInterval: NSTimeInterval, facing: CGPoint? = nil) {
+    func moveInDirection(_ direction: CGVector, withTimeInterval timeInterval: TimeInterval, facing: CGPoint? = nil) {
         // Grab an immutable position in case Sprite Kit changes it underneath us.
         let currentPosition = position
         let deltaX = movementSpeed * direction.dx
         let deltaY = movementSpeed * direction.dy
         let maximumDistance = movementSpeed * CGFloat(timeInterval)
         
-        moveFromCurrentPosition(currentPosition, byDeltaX: deltaX, deltaY: deltaY, maximumDistance: maximumDistance, facing: facing)
+        moveFrom(currentPosition: currentPosition, byDeltaX: deltaX, deltaY: deltaY, maximumDistance: maximumDistance, facing: facing)
     }
     
-    func moveFromCurrentPosition(currentPosition: CGPoint, byDeltaX dx: CGFloat, deltaY dy: CGFloat, maximumDistance: CGFloat, facing: CGPoint? = nil) {
+    func moveFrom(currentPosition: CGPoint, byDeltaX dx: CGFloat, deltaY dy: CGFloat, maximumDistance: CGFloat, facing: CGPoint? = nil) {
         let targetPosition = CGPoint(x: currentPosition.x + dx, y: currentPosition.y + dy)
         
         let angle = adjustAssetOrientation(targetPosition.radiansToPoint(currentPosition))
         
         if facing != nil {
             let facePosition = currentPosition + facing!
-            faceToPosition(facePosition)
+            face(position: facePosition)
         }
         else {
-            faceToPosition(targetPosition)
+            face(position: targetPosition)
         }
         
         let distRemaining = hypot(dx, dy)
@@ -428,15 +451,15 @@ class Character: ParallaxSprite {
         }
         
         if !isAttacking {
-            requestedAnimation = .Walk
+            requestedAnimation = .walk
         }
     }
 
     // MARK: Scene Interactions
     
-    func addToScene(scene: AdventureScene) {
-        scene.addNode(self, atWorldLayer: .Character)
-        scene.addNode(shadowBlob, atWorldLayer: .BelowCharacter)
+    func add(to scene: AdventureScene) {
+        scene.addNode(self, atWorldLayer: .character)
+        scene.addNode(shadowBlob, atWorldLayer: .belowCharacter)
     }
 
     override func removeFromParent() {

@@ -14,8 +14,8 @@ class HeroCharacter: Character {
     struct Constants {
         static let projectileCollisionRadius: CGFloat = 15.0
         static let projectileSpeed: CGFloat = 480.0
-        static let projectileLifetime: NSTimeInterval = 1.0
-        static let projectileFadeOutDuration: NSTimeInterval = 0.6
+        static let projectileLifetime: TimeInterval = 1.0
+        static let projectileFadeOutDuration: TimeInterval = 0.6
     }
     
     // MARK: Properties
@@ -47,21 +47,21 @@ class HeroCharacter: Character {
 
     // MARK: Scene Processing Support
 
-    override func animationDidComplete(animation: AnimationState) {
+    override func animationDidComplete(_ animation: AnimationState) {
         super.animationDidComplete(animation)
 
         switch animation {
-            case .Death:
+            case .death:
                 let actions = [
-                    SKAction.waitForDuration(4.0),
-                    SKAction.runBlock {
+                    SKAction.wait(forDuration: 4.0),
+                    SKAction.run {
                         self.characterScene.heroWasKilled(self)
                     },
                     SKAction.removeFromParent()
                 ]
-                runAction(SKAction.sequence(actions))
+                run(SKAction.sequence(actions))
 
-            case .Attack:
+            case .attack:
                 fireProjectile()
 
            default:
@@ -69,7 +69,7 @@ class HeroCharacter: Character {
         }
     }
 
-    override func collidedWith(other: SKPhysicsBody) {
+    override func collidedWith(_ other: SKPhysicsBody) {
         if other.categoryBitMask & ColliderType.GoblinOrBoss.rawValue == 0 {
             return
         }
@@ -77,34 +77,34 @@ class HeroCharacter: Character {
         if let enemy = other.node as? Character {
             if !enemy.isDying {
                 applyDamage(5.0)
-                requestedAnimation = .GetHit
+                requestedAnimation = .getHit
             }
         }
     }
 
     func fireProjectile() {
-        let projectile = self.dynamicType.projectile.copy() as! SKSpriteNode
+        let projectile = type(of: self).projectile.copy() as! SKSpriteNode
         projectile.position = position
         projectile.zRotation = zRotation
 
-        let emitter = self.dynamicType.projectileEmitter.copy() as! SKEmitterNode
-        emitter.targetNode = scene!.childNodeWithName("world")
+        let emitter = type(of: self).projectileEmitter.copy() as! SKEmitterNode
+        emitter.targetNode = scene!.childNode(withName: "world")
         projectile.addChild(emitter)
 
-        characterScene.addNode(projectile, atWorldLayer: .Character)
+        characterScene.addNode(projectile, atWorldLayer: .character)
         let rot = zRotation
 
         let x = -sin(rot) * Constants.projectileSpeed * CGFloat(Constants.projectileLifetime)
         let y =  cos(rot) * Constants.projectileSpeed * CGFloat(Constants.projectileLifetime)
-        projectile.runAction(SKAction.moveByX(x, y: y, duration: Constants.projectileLifetime))
+        projectile.run(SKAction.moveBy(x: x, y: y, duration: Constants.projectileLifetime))
 
-        let waitAction = SKAction.waitForDuration(Constants.projectileFadeOutDuration)
-        let fadeAction = SKAction.fadeOutWithDuration(Constants.projectileLifetime - Constants.projectileFadeOutDuration)
+        let waitAction = SKAction.wait(forDuration: Constants.projectileFadeOutDuration)
+        let fadeAction = SKAction.fadeOut(withDuration: Constants.projectileLifetime - Constants.projectileFadeOutDuration)
         let removeAction = SKAction.removeFromParent()
         let sequence = [waitAction, fadeAction, removeAction]
 
-        projectile.runAction(SKAction.sequence(sequence))
-        projectile.runAction(projectileSoundAction)
+        projectile.run(SKAction.sequence(sequence))
+        projectile.run(projectileSoundAction)
 
         projectile.userData = [Player.Keys.projectileUserDataPlayer: player]
     }

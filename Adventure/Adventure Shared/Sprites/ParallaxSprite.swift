@@ -40,18 +40,18 @@ class ParallaxSprite: SKSpriteNode {
     // MARK: Initializers
 
     convenience init () {
-      self.init(texture: nil, color: SKColor.whiteColor(), size: CGSize(width: 0, height: 0))
+      self.init(texture: nil, color: SKColor.white, size: CGSize(width: 0, height: 0))
     }
 
     convenience init(sprites: [SKSpriteNode], usingOffset offset: CGFloat) {
-        self.init(texture: nil, color: SKColor.whiteColor(), size: CGSize(width: 0, height: 0))
+        self.init(texture: nil, color: SKColor.white, size: CGSize(width: 0, height: 0))
 
         usesParallaxEffect = true
 
         let zOffset = 1.0 / CGFloat(sprites.count)
 
         let ourZPosition = zPosition
-        for (childNumber, node) in sprites.enumerate() {
+        for (childNumber, node) in sprites.enumerated() {
             node.zPosition = ourZPosition + (zOffset + (zOffset * CGFloat(childNumber)))
             addChild(node)
         }
@@ -61,8 +61,8 @@ class ParallaxSprite: SKSpriteNode {
     
     // MARK: NSCopying
 
-    override func copyWithZone(zone: NSZone) -> AnyObject {
-        let sprite = super.copyWithZone(zone) as! ParallaxSprite
+    override func copy(with zone: NSZone?) -> Any {
+        let sprite = super.copy(with: zone) as! ParallaxSprite
 
         sprite.parallaxOffset = parallaxOffset
         sprite.usesParallaxEffect = usesParallaxEffect
@@ -77,14 +77,14 @@ class ParallaxSprite: SKSpriteNode {
             return
         }
 
-        let scenePos = scene!.convertPoint(position, fromNode: parent!)
+        let scenePos = scene!.convert(position, from: parent!)
 
         let offsetX = -1.0 + (2.0 * (scenePos.x / scene!.size.width))
         let offsetY = -1.0 + (2.0 * (scenePos.y / scene!.size.height))
 
         let delta = parallaxOffset / CGFloat(children.count)
 
-        for (childNumber, child) in (children).enumerate() {
+        for (childNumber, child) in (children).enumerated() {
             child.position = CGPoint(x: offsetX * delta * CGFloat(childNumber), y: offsetY * delta * CGFloat(childNumber))
         }
 
