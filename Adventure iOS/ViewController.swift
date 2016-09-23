@@ -34,14 +34,14 @@ class ViewController: UIViewController {
         // So, we set the scale of the image to be used to double the scale of the image,
         // This effectively scales the cover image to 50%, matching the scene scaling.
         var image = UIImage(named: "cover")!
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            image = UIImage(CGImage: image.CGImage!, scale: image.scale * 2.0, orientation: UIImageOrientation.Up)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            image = UIImage(cgImage: image.cgImage!, scale: image.scale * 2.0, orientation: UIImageOrientation.up)
         }
 
         coverView.image = image
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         // Start the progress indicator animation.
@@ -53,14 +53,14 @@ class ViewController: UIViewController {
             // On iPhone/iPod touch we want to see a similar amount of the scene as on iPad.
             // So, we set the size of the scene to be double the size of the view, which is
             // the whole screen, 3.5- or 4- inch. This effectively scales the scene to 50%.
-            if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            if UIDevice.current.userInterfaceIdiom == .phone {
                 viewSize.height *= 2
                 viewSize.width *= 2
             }
 
             self.scene = loadedScene
             self.scene.size = viewSize
-            self.scene.scaleMode = .AspectFill
+            self.scene.scaleMode = .aspectFill
 
             #if DEBUG
             self.skView.showsDrawCount = true
@@ -68,13 +68,13 @@ class ViewController: UIViewController {
             #endif
 
             self.scene.finishedMovingToView = {
-                UIView.animateWithDuration(2.0, animations: {
+                UIView.animate(withDuration: 2.0, animations: {
                     self.archerButton.alpha = 1.0
                     self.warriorButton.alpha = 1.0
                     self.coverView.alpha = 0.0
                 }, completion: { finished in
                     self.loadingProgressIndicator.stopAnimating()
-                    self.loadingProgressIndicator.hidden = true
+                    self.loadingProgressIndicator.isHidden = true
                     self.coverView.removeFromSuperview()
                 })
             }
@@ -86,19 +86,19 @@ class ViewController: UIViewController {
     // MARK: IBActions
 
     @IBAction func chooseArcher(_: AnyObject) {
-        scene.startLevel(.Archer)
-        gameLogo.hidden = true 
+        scene.startLevel(.archer)
+        gameLogo.isHidden = true 
 
-        warriorButton.hidden = true
-        archerButton.hidden = true
+        warriorButton.isHidden = true
+        archerButton.isHidden = true
     }
 
     @IBAction func chooseWarrior(_: AnyObject) {
-        scene.startLevel(.Warrior)
-        gameLogo.hidden = true 
+        scene.startLevel(.warrior)
+        gameLogo.isHidden = true
         
-        warriorButton.hidden = true
-        archerButton.hidden = true
+        warriorButton.isHidden = true
+        archerButton.isHidden = true
     }
 }
 

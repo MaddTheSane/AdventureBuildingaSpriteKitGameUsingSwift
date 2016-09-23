@@ -48,7 +48,7 @@ class Player: NSObject {
 
     #if os(iOS)
     var movementTouch: UITouch?
-    var targetLocation = CGPointZero
+    var targetLocation = CGPoint.zero
     var moveRequested = false
     #endif
     

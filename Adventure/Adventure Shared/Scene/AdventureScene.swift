@@ -162,14 +162,14 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
             return
         }
 
-        if defaultPlayer.targetLocation != CGPointZero {
+        if defaultPlayer.targetLocation != .zero {
             if defaultPlayer.fireAction {
-                hero.faceToPosition(defaultPlayer.targetLocation)
+                hero.face(position: defaultPlayer.targetLocation)
             }
 
             if defaultPlayer.moveRequested {
                 if defaultPlayer.targetLocation != hero.position {
-                    hero.moveTowardsPosition(defaultPlayer.targetLocation, withTimeInterval: timeSinceLast)
+                    hero.move(towards: defaultPlayer.targetLocation, timeInterval: timeSinceLast)
                 }
                 else {
                     defaultPlayer.moveRequested = false
@@ -436,7 +436,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
         #if os(iOS)
         // Disable touch movement, otherwise new hero will try to move to previously-touched location.
-        player.moveRequested = false
+        player?.moveRequested = false
         #endif
 
         player?.livesLeft -= 1

@@ -11,7 +11,7 @@ import SpriteKit
 extension AdventureScene {
     // MARK: Touch Handling
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // If we have no hero, we don't need to update the user interface at all.
         if heroes.isEmpty || touches.count <= 0 {
             return
@@ -25,9 +25,9 @@ extension AdventureScene {
 
         let touch = touches.first!
 
-        defaultPlayer.targetLocation = touch.locationInNode(defaultPlayer.hero!.parent!)
+        defaultPlayer.targetLocation = touch.location(in: defaultPlayer.hero!.parent!)
 
-        let nodes = nodesAtPoint(touch.locationInNode(self)) 
+        let nodes = self.nodes(at: touch.location(in: self))
 
         let enemyBitmask = ColliderType.GoblinOrBoss.rawValue | ColliderType.Cave.rawValue
 
@@ -47,7 +47,7 @@ extension AdventureScene {
         defaultPlayer.movementTouch = touch
     }
 
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         // If we have no hero, we don't need to update the user interface at all.
         if heroes.isEmpty || touches.count <= 0 {
             return
@@ -57,7 +57,7 @@ extension AdventureScene {
         // touch.
         if let touch = defaultPlayer.movementTouch {
             if touches.contains(touch) {
-                defaultPlayer.targetLocation = touch.locationInNode(defaultPlayer.hero!.parent!)
+                defaultPlayer.targetLocation = touch.location(in: defaultPlayer.hero!.parent!)
 
                 if !defaultPlayer.fireAction {
                     defaultPlayer.moveRequested = true
@@ -66,7 +66,7 @@ extension AdventureScene {
         }
     }
 
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // If we have no hero, we don't need to update the user interface at all.
         if heroes.isEmpty || touches.count <= 0 {
             return
