@@ -30,7 +30,7 @@ class HeroCharacter: Character {
         self.init(texture: texture, atPosition: position)
         self.player = player
         
-        zRotation = CGFloat(M_PI)
+        zRotation = CGFloat.pi
         zPosition = -0.25
         name = "Hero"
     }

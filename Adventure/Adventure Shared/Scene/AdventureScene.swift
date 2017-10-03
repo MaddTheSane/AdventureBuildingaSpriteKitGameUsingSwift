@@ -94,7 +94,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
     let shouldCheat = false
     
     /// A closure to be called when `didMoveToView(_:)` completes.
-    var finishedMovingToView: (Void) -> Void = {}
+    var finishedMovingToView: () -> Void = {}
     
     // MARK: Initializers
     

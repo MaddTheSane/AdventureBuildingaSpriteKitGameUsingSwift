@@ -93,7 +93,7 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
 
         let splort = Goblin.deathSplort.copy() as! SKSpriteNode
         splort.zPosition = -1.0
-        splort.zRotation = unitRandom() * CGFloat(M_PI)
+        splort.zRotation = unitRandom() * CGFloat.pi
         splort.position = position
         splort.alpha = 0.5
         characterScene.addNode(splort, atWorldLayer: .ground)
