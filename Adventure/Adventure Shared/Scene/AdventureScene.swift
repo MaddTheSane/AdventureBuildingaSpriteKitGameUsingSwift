@@ -684,7 +684,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    func gameControllerDidConnect(_ notification: Notification) {
+    @objc func gameControllerDidConnect(_ notification: Notification) {
         let controller = notification.object as! GCController
         let playerIndex = controller.playerIndex
         if playerIndex == .indexUnset {
@@ -695,7 +695,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    func gameControllerDidDisconnect(_ notification: Notification) {
+    @objc func gameControllerDidDisconnect(_ notification: Notification) {
         let controller = notification.object as! GCController
         for player in players {
             if let player = player {
