@@ -52,9 +52,9 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
         // Assign the physics body; unwrap the physics body to configure it.
         physicsBody = SKPhysicsBody(circleOfRadius: collisionRadius)
         physicsBody!.isDynamic = false
-        physicsBody!.categoryBitMask = ColliderType.Cave.rawValue
+        physicsBody!.categoryBitMask = ColliderType.cave.rawValue
         physicsBody!.collisionBitMask = ColliderType.all.rawValue
-        physicsBody!.contactTestBitMask = ColliderType.Projectile.rawValue
+        physicsBody!.contactTestBitMask = ColliderType.projectile.rawValue
         
         animated = false
         zPosition = -0.85
@@ -72,7 +72,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
     
     override func collidedWith(_ other: SKPhysicsBody) {
         if health > 0.0 {
-            if (other.categoryBitMask & ColliderType.Projectile.rawValue) == ColliderType.Projectile.rawValue {
+            if (other.categoryBitMask & ColliderType.projectile.rawValue) == ColliderType.projectile.rawValue {
                 let damage = 10.0
                 applyCaveDamage(damage, projectile: other.node!)
             }

@@ -40,9 +40,9 @@ class HeroCharacter: Character {
     override func configurePhysicsBody() {
         // Assign the physics body; unwrap the physics body to configure it.
         physicsBody = SKPhysicsBody(circleOfRadius: collisionRadius)
-        physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
+        physicsBody!.categoryBitMask = ColliderType.hero.rawValue
         physicsBody!.collisionBitMask = ColliderType.allButProjectile.rawValue
-        physicsBody!.contactTestBitMask = ColliderType.GoblinOrBoss.rawValue
+        physicsBody!.contactTestBitMask = ColliderType.goblinOrBoss.rawValue
     }
 
     // MARK: Scene Processing Support
@@ -51,26 +51,26 @@ class HeroCharacter: Character {
         super.animationDidComplete(animation)
 
         switch animation {
-            case .death:
-                let actions = [
-                    SKAction.wait(forDuration: 4.0),
-                    SKAction.run {
-                        self.characterScene.heroWasKilled(self)
-                    },
-                    SKAction.removeFromParent()
-                ]
-                run(SKAction.sequence(actions))
+        case .death:
+            let actions = [
+                SKAction.wait(forDuration: 4.0),
+                SKAction.run {
+                    self.characterScene.heroWasKilled(self)
+                },
+                SKAction.removeFromParent()
+            ]
+            run(SKAction.sequence(actions))
 
-            case .attack:
-                fireProjectile()
+        case .attack:
+            fireProjectile()
 
-           default:
-                () // Do nothing
+        default:
+            break // Do nothing
         }
     }
 
     override func collidedWith(_ other: SKPhysicsBody) {
-        if other.categoryBitMask & ColliderType.GoblinOrBoss.rawValue == 0 {
+        if other.categoryBitMask & ColliderType.goblinOrBoss.rawValue == 0 {
             return
         }
 

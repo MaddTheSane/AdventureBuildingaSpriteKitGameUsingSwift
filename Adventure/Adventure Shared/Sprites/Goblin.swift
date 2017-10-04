@@ -41,9 +41,9 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
     override func configurePhysicsBody() {
         // Assign the physics body; unwrap the physics body to configure it.
         physicsBody = SKPhysicsBody(circleOfRadius: collisionRadius)
-        physicsBody!.categoryBitMask = ColliderType.GoblinOrBoss.rawValue
+        physicsBody!.categoryBitMask = ColliderType.goblinOrBoss.rawValue
         physicsBody!.collisionBitMask = ColliderType.all.rawValue
-        physicsBody!.contactTestBitMask = ColliderType.Projectile.rawValue
+        physicsBody!.contactTestBitMask = ColliderType.projectile.rawValue
     }
 
     // MARK: Scene Processing Support
@@ -73,7 +73,7 @@ final class Goblin: EnemyCharacter, SharedAssetProvider {
             return
         }
 
-        if otherBody.categoryBitMask & ColliderType.Projectile.rawValue == ColliderType.Projectile.rawValue {
+        if ColliderType(rawValue: otherBody.categoryBitMask).contains(.projectile) {
             // Apply random damage of either 100% or 50%
             requestedAnimation = .getHit
             var damage = 100.0

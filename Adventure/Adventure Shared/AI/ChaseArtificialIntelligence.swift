@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class ChaseArtificialIntelligence: ArtificialIntelligence {
+final class ChaseArtificialIntelligence: ArtificialIntelligence {
     // MARK: Properties
 
     var enemyAlertRadius: CGFloat

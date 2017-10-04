@@ -32,8 +32,8 @@ final class Archer: HeroCharacter, SharedAssetProvider {
         
         // Assign the physics body; unwrap the physics body to configure it.
         archerProjectile.physicsBody = SKPhysicsBody(circleOfRadius: HeroCharacter.Constants.projectileCollisionRadius)
-        archerProjectile.physicsBody!.categoryBitMask = ColliderType.Projectile.rawValue
-        archerProjectile.physicsBody!.collisionBitMask = ColliderType.Wall.rawValue
+        archerProjectile.physicsBody!.categoryBitMask = ColliderType.projectile.rawValue
+        archerProjectile.physicsBody!.collisionBitMask = ColliderType.wall.rawValue
         archerProjectile.physicsBody!.contactTestBitMask = archerProjectile.physicsBody!.collisionBitMask
         
         projectile = archerProjectile

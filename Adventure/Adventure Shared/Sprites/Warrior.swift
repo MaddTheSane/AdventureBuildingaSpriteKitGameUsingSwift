@@ -34,8 +34,8 @@ final class Warrior: HeroCharacter, SharedAssetProvider {
         
         // Assign the physics body; unwrap the physics body to configure it.
         warriorProjectile.physicsBody = SKPhysicsBody(circleOfRadius: HeroCharacter.Constants.projectileCollisionRadius)
-        warriorProjectile.physicsBody!.categoryBitMask = ColliderType.Projectile.rawValue
-        warriorProjectile.physicsBody!.collisionBitMask = ColliderType.Wall.rawValue
+        warriorProjectile.physicsBody!.categoryBitMask = ColliderType.projectile.rawValue
+        warriorProjectile.physicsBody!.collisionBitMask = ColliderType.wall.rawValue
         warriorProjectile.physicsBody!.contactTestBitMask = warriorProjectile.physicsBody!.collisionBitMask
         
         projectile = warriorProjectile

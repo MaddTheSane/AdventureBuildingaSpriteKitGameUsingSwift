@@ -39,13 +39,13 @@ final class Boss: EnemyCharacter, SharedAssetProvider {
         physicsBody = SKPhysicsBody(circleOfRadius: collisionRadius)
         
         // Our object type for collisions.
-        physicsBody!.categoryBitMask = ColliderType.GoblinOrBoss.rawValue
+        physicsBody!.categoryBitMask = ColliderType.goblinOrBoss.rawValue
         
         // Collides with these objects.
         physicsBody!.collisionBitMask = ColliderType.all.rawValue
         
         // We want notifications for colliding with these objects.
-        physicsBody!.contactTestBitMask = ColliderType.Projectile.rawValue
+        physicsBody!.contactTestBitMask = ColliderType.projectile.rawValue
     }
     
     // MARK: Scene Processing Support
@@ -70,7 +70,7 @@ final class Boss: EnemyCharacter, SharedAssetProvider {
             return
         }
         
-        if (otherBody.categoryBitMask & ColliderType.Projectile.rawValue) == ColliderType.Projectile.rawValue {
+        if ColliderType(rawValue: otherBody.categoryBitMask).contains(.projectile) {
             requestedAnimation = AnimationState.getHit
             let damage = 2.0
             let killed = applyDamage(damage, projectile: otherBody.node)

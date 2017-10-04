@@ -324,7 +324,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
             character.collidedWith(contact.bodyA)
         }
 
-        let rawProjectileType = ColliderType.Projectile.rawValue
+        let rawProjectileType = ColliderType.projectile.rawValue
         let bodyAIsProjectile = contact.bodyA.categoryBitMask & rawProjectileType == rawProjectileType
         let bodyBIsProjectile = contact.bodyB.categoryBitMask & rawProjectileType == rawProjectileType
         
@@ -369,7 +369,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
 
         var wallFound = false
         physicsWorld.enumerateBodies(alongRayStart: rayStart, end: rayEnd) { body, point, normal, stop in
-            if body.categoryBitMask & ColliderType.Wall.rawValue == ColliderType.Wall.rawValue {
+            if ColliderType(rawValue: body.categoryBitMask).contains(.wall) {
                 wallFound = true
                 stop.pointee = true
             }
@@ -529,7 +529,7 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
             // Unwrap the physics body to configure it.
             let wallNode = node.copy() as! SKNode
             wallNode.physicsBody!.isDynamic = false
-            wallNode.physicsBody!.categoryBitMask = ColliderType.Wall.rawValue
+            wallNode.physicsBody!.categoryBitMask = ColliderType.wall.rawValue
             self.addNode(wallNode, atWorldLayer: .ground)
         }
     }

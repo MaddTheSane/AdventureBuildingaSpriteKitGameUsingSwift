@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class SpawnArtificialIntelligence: ArtificialIntelligence {
+final class SpawnArtificialIntelligence: ArtificialIntelligence {
     // MARK: Properties
     
     var cave: Cave {

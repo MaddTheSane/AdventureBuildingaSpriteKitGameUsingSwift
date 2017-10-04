@@ -18,17 +18,31 @@ enum MoveDirection {
 
 struct ColliderType : OptionSet {
 	let rawValue: UInt32
-	fileprivate init(_ value: UInt32) { self.init(rawValue: value) }
+	private init(_ value: UInt32) { self.init(rawValue: value) }
 	init(rawValue value: UInt32) { self.rawValue = value }
 	
-	static let Hero = ColliderType(1 << 0)
-	static let GoblinOrBoss = ColliderType(1 << 1)
-	static let Projectile = ColliderType(1 << 2)
-	static let Wall = ColliderType(1 << 3)
-	static let Cave = ColliderType(1 << 4)
+    static var hero: ColliderType {
+        return ColliderType(1 << 0)
+    }
+    static var goblinOrBoss: ColliderType {
+        return ColliderType(1 << 1)
+    }
+    static var projectile: ColliderType {
+        return ColliderType(1 << 2)
+    }
+    static var wall: ColliderType {
+        return ColliderType(1 << 3)
+    }
+    static var cave: ColliderType {
+        return ColliderType(1 << 4)
+    }
 	
-	static let all: ColliderType = [ColliderType.Hero, ColliderType.GoblinOrBoss, ColliderType.Projectile, ColliderType.Wall, ColliderType.Cave]
-	static let allButProjectile: ColliderType = [ColliderType.Hero, ColliderType.GoblinOrBoss, ColliderType.Wall, ColliderType.Cave]
+    static var all: ColliderType {
+        return [ColliderType.hero, ColliderType.goblinOrBoss, ColliderType.projectile, ColliderType.wall, ColliderType.cave]
+    }
+    static var allButProjectile: ColliderType {
+        return [ColliderType.hero, ColliderType.goblinOrBoss, ColliderType.wall, ColliderType.cave]
+    }
 }
 
 class Character: ParallaxSprite {
@@ -374,27 +388,6 @@ class Character: ParallaxSprite {
             requestedAnimation = .walk
             run(action)
         }
-    }
-    
-    @available(*, unavailable, renamed:"moveIn(direction:timeInterval:)")
-    func moveInMoveDirection(_ direction: MoveDirection, withTimeInterval timeInterval: TimeInterval) {
-
-    }
-    
-    @available(*, unavailable, renamed:"move(towards:timeInterval:)")
-    func moveTowardsPosition(_ targetPosition: CGPoint, withTimeInterval timeInterval: TimeInterval) {
-    }
-    
-    @available(*, unavailable, renamed:"face(position:)")
-    func faceToPosition(_ position: CGPoint) -> CGFloat {
-    return 0
-    }
-    @available(*, unavailable, renamed:"moveFrom(currentPosition:byDeltaX:deltaY:maximumDistance:facing:)")
-    func moveFromCurrentPosition(_ currentPosition: CGPoint, byDeltaX dx: CGFloat, deltaY dy: CGFloat, maximumDistance: CGFloat, facing: CGPoint? = nil) {
-    }
-    
-    @available(*, unavailable, renamed:"add(to:)")
-    func addToScene(_ scene: AdventureScene) {
     }
     
     @discardableResult

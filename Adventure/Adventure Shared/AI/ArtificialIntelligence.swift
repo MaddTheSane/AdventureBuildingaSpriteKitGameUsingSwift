@@ -12,10 +12,10 @@ class ArtificialIntelligence {
     // MARK: Properties
 
     /// The character that should be moving towards the target.
-    var character: Character
+    final var character: Character
     
     /// The target of the AI. This property can be set after initialization.
-    var target: Character?
+    final var target: Character?
 
     // MARK: Initializers
 
