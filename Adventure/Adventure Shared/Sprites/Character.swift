@@ -75,7 +75,7 @@ class Character: ParallaxSprite {
             return SharedTextures.textures[characterType]?[SharedTextures.Keys.idle] ?? []
         }
         set {
-            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [String: [SKTexture]]()
+            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [SharedTextures.Keys: [SKTexture]]()
             texturesForCharacterType[SharedTextures.Keys.idle] = newValue
             SharedTextures.textures[characterType] = texturesForCharacterType
         }
@@ -86,7 +86,7 @@ class Character: ParallaxSprite {
             return SharedTextures.textures[characterType]?[SharedTextures.Keys.walk] ?? []
         }
         set {
-            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [String: [SKTexture]]()
+            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [SharedTextures.Keys: [SKTexture]]()
             texturesForCharacterType[SharedTextures.Keys.walk] = newValue
             SharedTextures.textures[characterType] = texturesForCharacterType
         }
@@ -97,7 +97,7 @@ class Character: ParallaxSprite {
             return SharedTextures.textures[characterType]?[SharedTextures.Keys.attack] ?? []
         }
         set {
-            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [String: [SKTexture]]()
+            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [SharedTextures.Keys: [SKTexture]]()
             texturesForCharacterType[SharedTextures.Keys.attack] = newValue
             SharedTextures.textures[characterType] = texturesForCharacterType
         }
@@ -108,7 +108,7 @@ class Character: ParallaxSprite {
             return SharedTextures.textures[characterType]?[SharedTextures.Keys.hit] ?? []
         }
         set {
-            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [String: [SKTexture]]()
+            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [SharedTextures.Keys: [SKTexture]]()
             texturesForCharacterType[SharedTextures.Keys.hit] = newValue
             SharedTextures.textures[characterType] = texturesForCharacterType
         }
@@ -119,7 +119,7 @@ class Character: ParallaxSprite {
             return SharedTextures.textures[characterType]?[SharedTextures.Keys.death] ?? []
         }
         set {
-            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [String: [SKTexture]]()
+            var texturesForCharacterType = SharedTextures.textures[characterType] ?? [SharedTextures.Keys: [SKTexture]]()
             texturesForCharacterType[SharedTextures.Keys.death] = newValue
             SharedTextures.textures[characterType] = texturesForCharacterType
         }
@@ -130,7 +130,7 @@ class Character: ParallaxSprite {
             return SharedSprites.sprites[characterType]?[SharedSprites.Keys.projectile] ?? SKSpriteNode()
         }
         set {
-            var spritesForCharacterType = SharedSprites.sprites[characterType] ?? [String: SKSpriteNode]()
+            var spritesForCharacterType = SharedSprites.sprites[characterType] ?? [SharedSprites.Keys: SKSpriteNode]()
             spritesForCharacterType[SharedSprites.Keys.projectile] = newValue
             SharedSprites.sprites[characterType] = spritesForCharacterType
         }
@@ -141,7 +141,7 @@ class Character: ParallaxSprite {
             return SharedEmitters.emitters[characterType]?[SharedEmitters.Keys.damage] ?? SKEmitterNode()
         }
         set {
-            var emittersForCharacterType = SharedEmitters.emitters[characterType] ?? [String: SKEmitterNode]()
+            var emittersForCharacterType = SharedEmitters.emitters[characterType] ?? [SharedEmitters.Keys: SKEmitterNode]()
             emittersForCharacterType[SharedEmitters.Keys.damage] = newValue
             SharedEmitters.emitters[characterType] = emittersForCharacterType
         }
@@ -152,7 +152,7 @@ class Character: ParallaxSprite {
             return SharedEmitters.emitters[characterType]?[SharedEmitters.Keys.death] ?? SKEmitterNode()
         }
         set {
-            var emittersForCharacterType = SharedEmitters.emitters[characterType] ?? [String: SKEmitterNode]()
+            var emittersForCharacterType = SharedEmitters.emitters[characterType] ?? [SharedEmitters.Keys: SKEmitterNode]()
             emittersForCharacterType[SharedEmitters.Keys.death] = newValue
             SharedEmitters.emitters[characterType] = emittersForCharacterType
         }
@@ -163,7 +163,7 @@ class Character: ParallaxSprite {
             return SharedEmitters.emitters[characterType]?[SharedEmitters.Keys.projectile] ?? SKEmitterNode()
         }
         set {
-            var emittersForCharacterType = SharedEmitters.emitters[characterType] ?? [String: SKEmitterNode]()
+            var emittersForCharacterType = SharedEmitters.emitters[characterType] ?? [SharedEmitters.Keys: SKEmitterNode]()
             emittersForCharacterType[SharedEmitters.Keys.projectile] = newValue
             SharedEmitters.emitters[characterType] = emittersForCharacterType
         }

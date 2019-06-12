@@ -19,7 +19,7 @@ class EnemyCharacter: Character {
             return SharedSprites.sprites[characterType]?[SharedSprites.Keys.deathSplort] ?? SKSpriteNode()
         }
         set {
-            var spritesForCharacterType = SharedSprites.sprites[characterType] ?? [String: SKSpriteNode]()
+            var spritesForCharacterType = SharedSprites.sprites[characterType] ?? [SharedSprites.Keys: SKSpriteNode]()
             spritesForCharacterType[SharedSprites.Keys.deathSplort] = newValue
             SharedSprites.sprites[characterType] = spritesForCharacterType
         }
