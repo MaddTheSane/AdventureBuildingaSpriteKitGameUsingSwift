@@ -461,8 +461,8 @@ class AdventureScene: SKScene, SKPhysicsContactDelegate {
         hud.name = Constants.hudNodeName
         hud.position = CGPoint(x: CGFloat(0 + Constants.hudWidth * index.rawValue), y: frame.size.height)
         addChild(hud)
-        player.hudAvatar = hud.childNode(withName: Constants.hudAvatarName) as! SKSpriteNode
-        player.hudScore = hud.childNode(withName: Constants.hudScoreName) as! SKLabelNode
+        player.hudAvatar = hud.childNode(withName: Constants.hudAvatarName) as? SKSpriteNode
+        player.hudScore = hud.childNode(withName: Constants.hudScoreName) as? SKLabelNode
         hud.enumerateChildNodes(withName: Constants.hudHeartName) { node, stop in
             player.hudLifeHearts.append(node as! SKSpriteNode)
         }

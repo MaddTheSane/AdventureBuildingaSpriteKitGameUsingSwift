@@ -106,6 +106,6 @@ class HeroCharacter: Character {
         projectile.run(SKAction.sequence(sequence))
         projectile.run(projectileSoundAction)
 
-        projectile.userData = [Player.Keys.projectileUserDataPlayer: player]
+        projectile.userData = [Player.Keys.projectileUserDataPlayer: player!]
     }
 }

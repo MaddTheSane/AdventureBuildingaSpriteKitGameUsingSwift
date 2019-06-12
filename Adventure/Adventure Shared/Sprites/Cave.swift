@@ -182,7 +182,7 @@ final class Cave: EnemyCharacter, SharedAssetProvider {
 
     func recycle(_ goblin: Goblin) {
         goblin.reset()
-        if let index = activeGoblins.index(of: goblin) {
+        if let index = activeGoblins.firstIndex(of: goblin) {
             activeGoblins.remove(at: index)
         }
         inactiveGoblins.append(goblin)
